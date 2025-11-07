@@ -5,6 +5,8 @@ import {
 } from "react-router-dom";
 import PublicLayout from "./layouts/public-layout";
 import ProtectedLayout from "./layouts/protected-layout";
+import MyPage from "./pages/my-page";
+import CalendarPage from "./pages/calendar-page";
 
 const publicRoutes: RouteObject[] = [
   {
@@ -22,6 +24,8 @@ const protectedRoutes: RouteObject[] = [
     element: <ProtectedLayout />,
     children: [
       // { index: true, element: <Home /> },
+      { path: "mypage", element: <MyPage /> },
+      { path: "calendar", element: <CalendarPage /> },
     ],
   },
 ];
