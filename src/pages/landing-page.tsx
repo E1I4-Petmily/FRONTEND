@@ -23,7 +23,7 @@ const Landing = () => {
       </div>
 
       <div className="absolute bottom-10 left-0 w-full px-[10px]">
-        <p className="text-[14px] text-[#ABABAB] font-pretendard text-center">
+        <p className="text-[14px] text-[#ABABAB] font-[PretendardVariable] text-center">
           로그인하고 나의 가족을 관리하세요
         </p>
         <div className="flex flex-col mt-2 gap-2">
