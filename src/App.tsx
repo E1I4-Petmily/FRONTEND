@@ -10,6 +10,8 @@ import MyPage from "./pages/my-page";
 import CalendarPage from "./pages/calendar-page";
 import SignUp from "./pages/signup-page";
 import LogIn from "./pages/login-page";
+import Welcome from "./pages/register/welcome-page";
+import Photo from "./pages/register/photo-page";
 
 const publicRoutes: RouteObject[] = [
   {
@@ -29,6 +31,8 @@ const protectedRoutes: RouteObject[] = [
     element: <ProtectedLayout />,
     children: [
       // { index: true, element: <Home /> },
+      { path: "register/welcome", element: <Welcome /> },
+      { path: "register/photo", element: <Photo /> },
       { path: "mypage", element: <MyPage /> },
       { path: "calendar", element: <CalendarPage /> },
     ],
