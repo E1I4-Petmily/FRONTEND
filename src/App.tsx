@@ -5,6 +5,7 @@ import {
 } from "react-router-dom";
 import PublicLayout from "./layouts/public-layout";
 import ProtectedLayout from "./layouts/protected-layout";
+import Landing from "./pages/landing-page";
 import MyPage from "./pages/my-page";
 import CalendarPage from "./pages/calendar-page";
 
@@ -13,6 +14,7 @@ const publicRoutes: RouteObject[] = [
     path: "/",
     element: <PublicLayout />,
     children: [
+      { path: "landing", element: <Landing /> },
       // { path: "login", element: <LogIn /> },
     ],
   },
