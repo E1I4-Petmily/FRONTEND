@@ -1,9 +1,17 @@
 import { matchPath, Outlet, useLocation } from "react-router-dom";
 import Header from "../components/common/Header";
+import NavigationBar from "../components/common/NavigationBar";
 //import NavigationBar from "../components/common/NavigationBar";
 
 const ProtectedLayout = () => {
   const location = useLocation();
+
+  const showNav = ["/calendar/*", "/mypage/*", "hospital/*"];
+
+  const showNavBar = showNav.some((pattern) =>
+    matchPath({ path: pattern, end: false }, location.pathname)
+  );
+
   const isCalendar = !!matchPath("/calendar", location.pathname);
 
   const hideArrowPages = ["/calendar", "/mypage"];
@@ -24,6 +32,7 @@ const ProtectedLayout = () => {
         />
         <div className="pt-12">
           <Outlet />
+          {showNavBar && <NavigationBar />}
         </div>
       </div>
     </div>
