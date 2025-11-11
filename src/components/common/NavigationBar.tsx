@@ -26,7 +26,7 @@ const NavigationBar: React.FC = () => {
     !!matchPath({ path: pattern, end: false }, location.pathname);
 
   return (
-    <nav className="fixed bottom-0 left-0 w-full max-w-[480px] mx-auto right-0 bg-white flex justify-around items-center h-20 border-t border-gray-200">
+    <nav className="fixed bottom-0 left-0 w-full max-w-[480px] mx-auto right-0 bg-[#FFFFFF] flex justify-around items-center h-20">
       <button
         onClick={() => navigate("/calendar")}
         className="flex flex-col items-center gap-2 text-xs"
