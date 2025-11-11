@@ -12,6 +12,9 @@ import SignUp from "./pages/signup-page";
 import LogIn from "./pages/login-page";
 import Welcome from "./pages/register/welcome-page";
 import Photo from "./pages/register/photo-page";
+import Information from "./pages/register/information-page";
+import Color from "./pages/register/color-page";
+import Completion from "./pages/register/completion-page";
 
 const publicRoutes: RouteObject[] = [
   {
@@ -33,6 +36,9 @@ const protectedRoutes: RouteObject[] = [
       // { index: true, element: <Home /> },
       { path: "register/welcome", element: <Welcome /> },
       { path: "register/photo", element: <Photo /> },
+      { path: "register/information", element: <Information /> },
+      { path: "register/color", element: <Color /> },
+      { path: "register/completion", element: <Completion /> },
       { path: "mypage", element: <MyPage /> },
       { path: "calendar", element: <CalendarPage /> },
     ],

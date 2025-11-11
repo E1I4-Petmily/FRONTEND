@@ -3,6 +3,7 @@ import RegisterLayout from "../../layouts/register-layout";
 import type { PetForm } from "../../types/pet";
 import { useNavigate } from "react-router-dom";
 import { usePetFormStore } from "../../store/petFormStore";
+import Picker from "react-mobile-picker";
 
 export default function Information() {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ export default function Information() {
     setBirth(pickerValue as PetForm["birthday"]);
     setGender(gender);
 
-    navigate("/onboarding/color");
+    navigate("/register/color");
   }, [
     name,
     gender,
@@ -63,7 +64,10 @@ export default function Information() {
       buttonContext="다음"
     >
       <div className="mb-4">
-        <label htmlFor="name" className="block text-gray-700 font-medium mb-2">
+        <label
+          htmlFor="name"
+          className="block font-[PretendardVariable] font-medium text-[18px] mb-2"
+        >
           이름
         </label>
         <input
@@ -72,15 +76,17 @@ export default function Information() {
           placeholder="반려동물의 이름"
           value={name}
           onChange={(e) => setNameState(e.target.value)}
-          className="w-full px-4 py-2 border-b border-gray-300 focus:border-gray-700 focus:outline-none transition-colors"
+          className="w-full px-4 py-2 font-[PretendardVariable] border-b border-[#D1D1D1] focus:border-gray-700 focus:outline-none transition-colors placeholder-[#ABABAB]"
         />
       </div>
 
       <div className="mb-6">
-        <label className="block text-gray-700 font-medium mb-2">생년월일</label>
+        <label className="block font-[PretendardVariable] font-medium text-[18px] mb-2">
+          생년월일
+        </label>
         <div
           onClick={() => setShowPicker(true)}
-          className={`flex items-center justify-between px-4 py-2 cursor-pointer border-b ${
+          className={`flex items-center justify-between px-4 py-2 font-[PretendardVariable] cursor-pointer border-b border-[#D1D1D1] focus:border-gray-700 focus:outline-none transition-colors ${
             showPicker ? "border-gray-700" : "border-gray-300"
           } transition-colors`}
         >
@@ -97,10 +103,12 @@ export default function Information() {
       </div>
 
       <div className="mb-6">
-        <label className="block text-gray-700 font-medium mb-2">성별</label>
+        <label className="block font-[PretendardVariable] font-medium text-[18px] mb-2">
+          성별
+        </label>
         <div
           onClick={() => setShowGenderPicker(true)}
-          className={`flex px-4 py-2 cursor-pointer border-b ${
+          className={`flex px-4 py-2 font-[PretendardVariable] cursor-pointer border-b border-[#D1D1D1] focus:border-gray-700 focus:outline-none transition-colors ${
             showGenderPicker ? "border-gray-700" : "border-gray-300"
           } transition-colors`}
         >
@@ -144,7 +152,7 @@ export default function Information() {
               className="mt-2 w-full bg-red-300 text-white py-2 rounded-lg"
               onClick={() => setShowPicker(false)}
             >
-              선택 완료
+              저장
             </button>
           </div>
         </div>
@@ -180,7 +188,7 @@ export default function Information() {
               className="mt-2 w-full bg-red-300 text-white py-2 rounded-lg"
               onClick={() => setShowGenderPicker(false)}
             >
-              선택 완료
+              저장
             </button>
           </div>
         </div>
