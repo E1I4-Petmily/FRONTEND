@@ -1,5 +1,3 @@
-import { useLocation } from "react-router-dom";
-import Header from "../components/common/Header";
 import Button from "../components/common/Button";
 
 interface RegisterLayoutProps {
