@@ -1,9 +1,9 @@
-import { useEffect, useState, type FC } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/common/Button";
 import Header from "../components/common/Header";
 
-const LogIn: FC = () => {
+export default function LogIn() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -107,6 +107,4 @@ const LogIn: FC = () => {
       </div>
     </div>
   );
-};
-
-export default LogIn;
+}

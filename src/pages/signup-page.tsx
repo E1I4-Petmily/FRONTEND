@@ -1,4 +1,4 @@
-import { useEffect, useState, type FC } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
 import axios from "axios";
@@ -14,7 +14,7 @@ import pig from "../assets/profile-icons/pig.png";
 import Button from "../components/common/Button";
 import Header from "../components/common/Header";
 
-const SignUp: FC = () => {
+export default function SignUp() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -67,7 +67,7 @@ const SignUp: FC = () => {
       if (res.status === 201 || res.status === 200) {
         navigate("/landing");
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
 
       // 임시
@@ -206,6 +206,4 @@ const SignUp: FC = () => {
       </div>
     </div>
   );
-};
-
-export default SignUp;
+}

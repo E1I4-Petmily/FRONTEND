@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import mainlogo from "../assets/petmily-main.png";
 import Button from "../components/common/Button";
 
-const Landing = () => {
+export default function Landing() {
   const navigate = useNavigate();
 
   return (
@@ -45,6 +45,4 @@ const Landing = () => {
       </div>
     </div>
   );
-};
-
-export default Landing;
+}
