@@ -1,7 +1,5 @@
 import { useEffect, useState, type FC } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
-import axios from "axios";
 import Button from "../components/common/Button";
 import Header from "../components/common/Header";
 

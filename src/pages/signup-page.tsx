@@ -1,6 +1,6 @@
 import { useEffect, useState, type FC } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import axios from "axios";
 import cat from "../assets/profile-icons/cat.png";
 import tigercat from "../assets/profile-icons/cheese.png";
