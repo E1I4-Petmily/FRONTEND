@@ -72,8 +72,10 @@ const Header = ({ type, title, onIconClick }: HeaderProps) => {
   };
 
   return (
-    <header className="fixed top-0 w-full max-w-[480px] z-50 bg-[#F8F8F8] h-[50px] flex justify-center items-center relative">
-      {headerContent()}
+    <header className="fixed top-0 left-0 right-0 z-50 bg-[#F8F8F8] h-[50px] flex justify-center">
+      <div className="w-full max-w-[480px] flex items-center justify-center relative">
+        {headerContent()}
+      </div>
     </header>
   );
 };

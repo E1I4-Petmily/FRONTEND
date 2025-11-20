@@ -15,6 +15,9 @@ import Photo from "./pages/register/photo-page";
 import Information from "./pages/register/information-page";
 import Color from "./pages/register/color-page";
 import Completion from "./pages/register/completion-page";
+import BehaviorPage from "./pages/record/behavior-page";
+import AppearancePage from "./pages/record/appearance-page";
+import ReactionPage from "./pages/record/reaction-page";
 
 const publicRoutes: RouteObject[] = [
   {
@@ -41,6 +44,9 @@ const protectedRoutes: RouteObject[] = [
       { path: "register/completion", element: <Completion /> },
       { path: "mypage", element: <MyPage /> },
       { path: "calendar", element: <CalendarPage /> },
+      { path: "calendar/behavior", element: <BehaviorPage /> },
+      { path: "calendar/appearance", element: <AppearancePage /> },
+      { path: "calendar/reaction", element: <ReactionPage /> },
     ],
   },
 ];
