@@ -70,7 +70,7 @@ const CustomCalendar = <T,>({
   };
 
   return (
-    <div className="w-full max-w-md mx-auto p-4 bg-white shadow-lg rounded-2xl">
+    <div className="w-full max-w-md mx-auto p-4 bg-white rounded-2xl">
       {/* 상단 헤더 */}
       <div className="flex items-center justify-between mb-4">
         <button onClick={prevMonth}>

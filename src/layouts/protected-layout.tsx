@@ -22,6 +22,7 @@ const ProtectedLayout = () => {
     "/calendar/behavior": "행동식습관",
     "/calendar/appearance": "외형이상",
     "/calendar/reaction": "생리반응",
+    "/hospital/reservation": "예약하기",
   };
 
   const title = pageTitles[location.pathname] || "";
@@ -32,6 +33,11 @@ const ProtectedLayout = () => {
         <Header
           type={isCalendar ? "logoOnly" : hasArrow ? "default" : "titleOnly"}
           title={title}
+          bgColor={
+            location.pathname === "/hospital/reservation"
+              ? "#FFFFFF"
+              : undefined
+          }
         />
         <div className="pt-12">
           <Outlet />
