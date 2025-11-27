@@ -34,12 +34,13 @@ export default function MyPage() {
 
       <p className="text-sm font-semibold mb-3">내 반려동물</p>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-7">
         <PetCard
           name="식빵"
           gender="수컷"
           birthDate="2023.10.04"
           petImageUrl={cat1}
+          colorHex="#00c8b3"
         />
 
         <PetCard
@@ -47,6 +48,7 @@ export default function MyPage() {
           gender="수컷"
           birthDate="2024.01.10"
           petImageUrl={cat1}
+          colorHex="#00c8b3"
         />
 
         <PetCard
@@ -54,6 +56,7 @@ export default function MyPage() {
           gender="수컷"
           birthDate="2023.10.04"
           petImageUrl={cat1}
+          colorHex="#FFCC00"
         />
       </div>
 

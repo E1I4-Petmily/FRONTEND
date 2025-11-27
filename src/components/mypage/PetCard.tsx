@@ -1,18 +1,31 @@
 import { useState } from "react";
 import moreIcon from "../../assets/more.svg";
+import MiniTag from "../common/MiniTag";
 
 interface PetCardProps {
   name: string;
   gender: string;
   birthDate: string;
   petImageUrl: string;
+  colorHex: string;
 }
 
-function PetCard({ name, gender, birthDate, petImageUrl }: PetCardProps) {
+function PetCard({
+  name,
+  gender,
+  birthDate,
+  petImageUrl,
+  colorHex,
+}: PetCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="relative w-[150px] bg-white rounded-[20px] shadow-md pb-4">
+    <div
+      className="relative bg-white rounded-[20px] shadow-md pb-4"
+      style={{
+        width: "calc(100%)",
+      }}
+    >
       <img
         src={petImageUrl}
         alt={name}
@@ -27,13 +40,9 @@ function PetCard({ name, gender, birthDate, petImageUrl }: PetCardProps) {
         </button>
       </div>
 
-      <div className="flex gap-2 px-3 mt-1">
-        <span className="px-2 py-0.5 text-xs rounded-[20px] bg-[#ccfffa] text-[#00c8b3]">
-          {gender}
-        </span>
-        <span className="px-2 py-0.5 text-xs rounded-[20px] bg-[#ccfffa] text-[#00c8b3]">
-          {birthDate}
-        </span>
+      <div className="flex gap-2 px-3 mt-2">
+        <MiniTag label={gender} colorHex={colorHex} />
+        <MiniTag label={birthDate} colorHex={colorHex} />
       </div>
 
       {menuOpen && (
