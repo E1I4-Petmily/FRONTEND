@@ -29,7 +29,7 @@ const ProtectedLayout = () => {
 
   return (
     <div className="flex justify-center min-h-screen">
-      <div className="w-full max-w-[480px] min-h-screen bg-[#F8F8F8]">
+      <div className="relative w-full max-w-[480px] min-h-screen bg-[#F8F8F8]">
         <Header
           type={isCalendar ? "logoOnly" : hasArrow ? "default" : "titleOnly"}
           title={title}
