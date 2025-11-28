@@ -1,23 +1,42 @@
 import { useState } from "react";
 import moreIcon from "../../assets/more.svg";
 import MiniTag from "../common/MiniTag";
+import plus from "../../assets/plus.svg";
 
 interface PetCardProps {
-  name: string;
-  gender: string;
-  birthDate: string;
-  petImageUrl: string;
-  colorHex: string;
+  type?: "normal" | "add";
+  name?: string;
+  gender?: string;
+  birthDate?: string;
+  petImageUrl?: string;
+  colorHex?: string;
+  onAddClick?: () => void;
 }
 
 function PetCard({
+  type = "normal",
   name,
   gender,
   birthDate,
   petImageUrl,
   colorHex,
+  onAddClick,
 }: PetCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  if (type === "add") {
+    return (
+      <button
+        onClick={onAddClick}
+        style={{ width: "calc(100%)" }}
+        className="h-[190px] rounded-[20px] bg-[#ECECEC] shadow-md flex flex-col items-center justify-center"
+      >
+        <div className="w-10 h-10 bg-[#D9D9D9] rounded-full flex items-center justify-center">
+          <img src={plus} alt="add" className="w-6 h-6" />
+        </div>
+      </button>
+    );
+  }
 
   return (
     <div
@@ -41,8 +60,8 @@ function PetCard({
       </div>
 
       <div className="flex gap-2 px-3 mt-2">
-        <MiniTag label={gender} colorHex={colorHex} />
-        <MiniTag label={birthDate} colorHex={colorHex} />
+        <MiniTag label={gender!} colorHex={colorHex!} />
+        <MiniTag label={birthDate!} colorHex={colorHex!} />
       </div>
 
       {menuOpen && (
