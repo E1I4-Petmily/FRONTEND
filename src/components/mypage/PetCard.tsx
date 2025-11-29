@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import moreIcon from "../../assets/more.svg";
 import MiniTag from "../common/MiniTag";
 import plus from "../../assets/plus.svg";
@@ -23,6 +23,24 @@ function PetCard({
   onAddClick,
 }: PetCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    //메뉴바 바깥 클릭 시 닫게하기
+    function handleClickOutside(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    }
+
+    if (menuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [menuOpen]);
 
   if (type === "add") {
     return (
@@ -65,11 +83,15 @@ function PetCard({
       </div>
 
       {menuOpen && (
-        <div className="absolute right-3 top-12 bg-white shadow-md rounded-lg w-[100px] py-2 z-10">
-          <button className="w-full text-left px-3 py-1 hover:bg-gray-100 text-sm">
+        <div
+          ref={menuRef}
+          className="absolute right-3 top-12 bg-white shadow-md rounded-lg w-[120px] z-10"
+        >
+          <button className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded-t-lg text-sm">
             수정하기
           </button>
-          <button className="w-full text-left px-3 py-1 hover:bg-gray-100 text-sm text-red-500">
+          <div className="w-full h-[1px] bg-[#E7EAED]"></div>
+          <button className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded-b-lg text-sm text-red-500">
             삭제하기
           </button>
         </div>
