@@ -36,27 +36,30 @@ export default function MyPage() {
       <div className="grid grid-cols-2 gap-7">
         <PetCard
           type="normal"
+          petId={1}
           name="식빵"
           gender="수컷"
-          birthDate="2023.10.04"
+          birthDate="2023-10-04"
           petImageUrl={cat1}
           colorHex="#00c8b3"
         />
 
         <PetCard
           type="normal"
+          petId={2}
           name="쿠키"
           gender="수컷"
-          birthDate="2024.01.10"
+          birthDate="2023-10-04"
           petImageUrl={cat1}
           colorHex="#00c8b3"
         />
 
         <PetCard
           type="normal"
+          petId={3}
           name="고먐미"
           gender="수컷"
-          birthDate="2023.10.04"
+          birthDate="2023-10-04"
           petImageUrl={cat1}
           colorHex="#FFCC00"
         />

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 interface PetCardProps {
   type?: "normal" | "add";
+  petId?: number;
   name?: string;
   gender?: string;
   birthDate?: string;
@@ -16,6 +17,7 @@ interface PetCardProps {
 
 function PetCard({
   type = "normal",
+  petId,
   name,
   gender,
   birthDate,
@@ -30,6 +32,7 @@ function PetCard({
   const handleEditClick = () => {
     navigate(`/petedit`, {
       state: {
+        petId,
         name,
         gender,
         birthDate,
