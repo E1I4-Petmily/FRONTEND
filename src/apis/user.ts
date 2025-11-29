@@ -11,36 +11,41 @@ export async function signup(signupData: SignupRequest) {
   return response.data;
 }
 
-export async function login(loginData: LoginRequest): Promise<void> {
+export async function login(loginData: LoginRequest): Promise<string | null> {
   const { username, password } = loginData;
 
-  const response = await axios.post(
-    "https://petmilly.duckdns.org/api/v1/auth/users/login",
-    null,
-    {
-      params: { username, password },
+  const params = new URLSearchParams();
+  params.append("username", username);
+  params.append("password", password);
+
+  try {
+    const response = await axiosInstance.post(
+      "/api/v1/auth/users/login",
+      params,
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    console.log("📩 응답 데이터:", response.data);
+
+    const accessToken = response.data?.accessToken ?? null;
+
+    console.log("📩 AccessToken 값: ", accessToken);
+
+    if (accessToken) {
+      localStorage.setItem("accessToken", accessToken);
     }
-  );
-
-  console.log("📩 응답 헤더:", response.headers);
-  console.log("📩 응답 데이터:", response.data);
-
-  console.log("📦 요청 URL:", "/api/v1/auth/users/login");
-  console.log("📦 요청 params:", { username, password });
-
-  const authHeader =
-    response.headers["authorization"] || response.headers["Authorization"];
-
-  const accessToken = authHeader?.startsWith("Bearer ")
-    ? authHeader.split(" ")[1]
-    : null;
-
-  console.log("📩 AccessToken 값: ", accessToken);
-
-  if (accessToken) {
-    localStorage.setItem("accessToken", accessToken);
-  } else {
-    throw new Error("로그인 실패: 토큰이 없습니다.");
+    return accessToken;
+  } catch (err) {
+    if (axios.isAxiosError(err)) {
+      console.error("로그인 실패:", err.response?.status, err.response?.data);
+    } else {
+      console.error("알 수 없는 에러", err);
+    }
+    return null;
   }
 }
 

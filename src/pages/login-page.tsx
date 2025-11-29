@@ -17,16 +17,8 @@ export default function LogIn() {
   const handleLogIn = async () => {
     if (!formValid) return;
 
-    try {
-      await login({
-        username: email,
-        password,
-      });
-      navigate("/calendar");
-    } catch (err) {
-      console.error("로그인 실패: ", err);
-      alert(err || "이메일 또는 비밀번호가 올바르지 않습니다.");
-    }
+    const token = await login({ username: email, password });
+    if (token) navigate("/calendar");
   };
 
   return (
