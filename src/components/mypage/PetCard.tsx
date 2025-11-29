@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import moreIcon from "../../assets/more.svg";
 import MiniTag from "../common/MiniTag";
 import plus from "../../assets/plus.svg";
+import { useNavigate } from "react-router-dom";
 
 interface PetCardProps {
   type?: "normal" | "add";
@@ -24,6 +25,19 @@ function PetCard({
 }: PetCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+
+  const handleEditClick = () => {
+    navigate(`/petedit`, {
+      state: {
+        name,
+        gender,
+        birthDate,
+        petImageUrl,
+        colorHex,
+      },
+    });
+  };
 
   useEffect(() => {
     //메뉴바 바깥 클릭 시 닫게하기
@@ -87,7 +101,10 @@ function PetCard({
           ref={menuRef}
           className="absolute right-3 top-12 bg-white shadow-md rounded-lg w-[120px] z-10"
         >
-          <button className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded-t-lg text-sm">
+          <button
+            className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded-t-lg text-sm"
+            onClick={handleEditClick}
+          >
             수정하기
           </button>
           <div className="w-full h-[1px] bg-[#E7EAED]"></div>
