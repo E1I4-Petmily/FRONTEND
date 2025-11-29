@@ -19,6 +19,7 @@ const ProtectedLayout = () => {
 
   const pageTitles: Record<string, string> = {
     "/mypage": "마이페이지",
+    "/petedit": "반려동물 정보 수정",
   };
 
   const title = pageTitles[location.pathname] || "";

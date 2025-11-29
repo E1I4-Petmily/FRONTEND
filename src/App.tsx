@@ -15,6 +15,7 @@ import Photo from "./pages/register/photo-page";
 import Information from "./pages/register/information-page";
 import Color from "./pages/register/color-page";
 import Completion from "./pages/register/completion-page";
+import PetEdit from "./pages/pet-edit-page";
 
 const publicRoutes: RouteObject[] = [
   {
@@ -41,6 +42,7 @@ const protectedRoutes: RouteObject[] = [
       { path: "register/completion", element: <Completion /> },
       { path: "mypage", element: <MyPage /> },
       { path: "calendar", element: <CalendarPage /> },
+      { path: "petedit", element: <PetEdit /> },
     ],
   },
 ];
