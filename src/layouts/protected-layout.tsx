@@ -1,7 +1,6 @@
 import { matchPath, Outlet, useLocation } from "react-router-dom";
 import Header from "../components/common/Header";
 import NavigationBar from "../components/common/NavigationBar";
-//import NavigationBar from "../components/common/NavigationBar";
 
 const ProtectedLayout = () => {
   const location = useLocation();
@@ -22,6 +21,7 @@ const ProtectedLayout = () => {
     "/calendar/behavior": "행동식습관",
     "/calendar/appearance": "외형이상",
     "/calendar/reaction": "생리반응",
+    "/calendar/summary": "AI 요약 리포트 생성",
     "/hospital/reservation": "예약하기",
   };
 

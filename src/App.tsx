@@ -19,6 +19,7 @@ import BehaviorPage from "./pages/record/behavior-page";
 import AppearancePage from "./pages/record/appearance-page";
 import ReactionPage from "./pages/record/reaction-page";
 import ReservationPage from "./pages/reservation-page";
+import PDFSummaryPage from "./pages/pdf-summary-page";
 
 const publicRoutes: RouteObject[] = [
   {
@@ -48,6 +49,7 @@ const protectedRoutes: RouteObject[] = [
       { path: "calendar/behavior", element: <BehaviorPage /> },
       { path: "calendar/appearance", element: <AppearancePage /> },
       { path: "calendar/reaction", element: <ReactionPage /> },
+      { path: "calendar/summary", element: <PDFSummaryPage /> },
       { path: "hospital/reservation", element: <ReservationPage /> },
     ],
   },

@@ -18,7 +18,7 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <button
       onClick={onClick}
-      className="w-[calc(100%-20px)] h-[50px] mx-[10px] text-[16px] rounded-2xl font-pretendard text-white transition-colors"
+      className="w-[calc(100%-20px)] h-[44px] mx-[10px] text-[16px] rounded-2xl font-pretendard text-white transition-colors"
       style={{
         backgroundColor: bgColor,
 
