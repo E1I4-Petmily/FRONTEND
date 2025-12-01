@@ -2,8 +2,15 @@ import catIcon from "../assets/profile-icons/cat.png";
 import PetCard from "../components/mypage/PetCard";
 import cat1 from "../assets/고양이1.jpg";
 import pencil from "../assets/pencil.svg";
+import { useNavigate } from "react-router-dom";
 
 export default function MyPage() {
+  const navigate = useNavigate();
+
+  const handleReportClick = (petId: number) => {
+    navigate("/mypage/reports", { state: { petId } });
+  };
+
   return (
     <div className="px-6 pb-24 font-[PretendardVariable]">
       <div className="flex flex-col items-center">
@@ -23,9 +30,24 @@ export default function MyPage() {
         <p className="text-sm font-semibold">PDF 요약 리포트</p>
 
         <div className="flex flex-col gap-2 mt-3">
-          <p className="text-base font-medium">식빵</p>
-          <p className="text-base font-medium">쿠키</p>
-          <p className="text-base font-medium">고먐미</p>
+          <button
+            className="text-base font-medium text-left"
+            onClick={() => handleReportClick(1)}
+          >
+            식빵
+          </button>
+          <button
+            className="text-base font-medium text-left"
+            onClick={() => handleReportClick(2)}
+          >
+            쿠키
+          </button>
+          <button
+            className="text-base font-medium text-left"
+            onClick={() => handleReportClick(3)}
+          >
+            고먐미
+          </button>
         </div>
       </div>
 
