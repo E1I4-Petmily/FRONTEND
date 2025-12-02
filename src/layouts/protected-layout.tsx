@@ -14,7 +14,12 @@ const ProtectedLayout = () => {
 
   const isCalendar = !!matchPath("/calendar", location.pathname);
 
-  const hideArrowPages = ["/calendar", "/mypage", "/register/completion"];
+  const hideArrowPages = [
+    "/calendar",
+    "/mypage",
+    "/register/completion",
+    "/hospital",
+  ];
   const hasArrow = !hideArrowPages.includes(location.pathname);
 
   const pageTitles: Record<string, string> = {
