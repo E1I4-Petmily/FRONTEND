@@ -21,7 +21,7 @@ const RegisterLayout = ({
 
   return (
     <div className="flex flex-col min-h-screen mt-[-40px]">
-      <div className="px-6 pb-6">
+      <div className="px-6 pb-6 pt-12">
         <div className="w-full bg-[#D1D1D1] h-2 rounded-full">
           <div
             className="h-2 rounded-full bg-[#F56E6D] transition-all"

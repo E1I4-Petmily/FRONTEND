@@ -10,13 +10,18 @@ interface HeaderProps {
   type: HeaderType;
   title?: string;
   onIconClick?: () => void;
+  bgColor?: string;
 }
 
-const Header = ({ type, title, onIconClick }: HeaderProps) => {
+const Header = ({ type, title, bgColor }: HeaderProps) => {
   const navigate = useNavigate();
 
   const handleClickBack = () => {
     navigate(-1);
+  };
+
+  const handleSummary = () => {
+    navigate("/calendar/summary");
   };
 
   const headerContent = () => {
@@ -61,7 +66,7 @@ const Header = ({ type, title, onIconClick }: HeaderProps) => {
               src={Lightening}
               alt="PDF 변환 버튼"
               className="w-6 h-6 cursor-pointer"
-              onClick={onIconClick}
+              onClick={handleSummary}
             />
           </div>
         );
@@ -72,8 +77,13 @@ const Header = ({ type, title, onIconClick }: HeaderProps) => {
   };
 
   return (
-    <header className="fixed top-0 w-full max-w-[480px] z-50 bg-[#F8F8F8] h-[50px] flex justify-center items-center relative">
-      {headerContent()}
+    <header
+      className="fixed top-0 w-full max-w-[480px] mx-auto left-0 right-0 z-50 bg-[#F8F8F8] h-[50px] flex justify-center"
+      style={{ backgroundColor: bgColor || "#F8F8F8" }}
+    >
+      <div className="w-full max-w-[480px] flex items-center justify-center relative">
+        {headerContent()}
+      </div>
     </header>
   );
 };
