@@ -18,6 +18,8 @@ const ProtectedLayout = () => {
 
   const pageTitles: Record<string, string> = {
     "/mypage": "마이페이지",
+    "/petedit": "반려동물 정보 수정",
+    "/mypage/reports": "요약 리포트",
     "/calendar/behavior": "행동식습관",
     "/calendar/appearance": "외형이상",
     "/calendar/reaction": "생리반응",
