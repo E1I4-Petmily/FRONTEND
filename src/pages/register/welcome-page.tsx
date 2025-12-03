@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import bird from "../../assets/yellowbird.png";
-import cat from "../../assets/graycat.png";
-import dog from "../../assets/browndog.png";
+import bird from "../../assets/register-welcome/yellow-bird.png";
+import cat from "../../assets/register-welcome/gray-cat.png";
+import dog from "../../assets//register-welcome/brown-dog.png";
 import RegisterLayout from "../../layouts/register-layout";
 
 export default function Welcome() {
