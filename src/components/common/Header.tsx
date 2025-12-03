@@ -78,7 +78,7 @@ const Header = ({ type, title, bgColor }: HeaderProps) => {
 
   return (
     <header
-      className="fixed top-0 w-full left-0 right-0 z-50 bg-[#F8F8F8] h-[50px] flex justify-center"
+      className="fixed top-0 w-full max-w-[480px] mx-auto left-0 right-0 z-50 bg-[#F8F8F8] h-[50px] flex justify-center"
       style={{ backgroundColor: bgColor || "#F8F8F8" }}
     >
       <div className="w-full max-w-[480px] flex items-center justify-center relative">
