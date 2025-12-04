@@ -6,7 +6,7 @@ export interface Hospital {
   rating: number | null;
   userRatingsTotal: number | null;
   registered: boolean; // 펫밀리 가입 여부
-  treatTargets?: string[]; // 가입 병원의 진료 대상 태그 (강아지, 도마뱀 등)
+  animalTypes?: string[]; //진료동물종류
 }
 
 const MOCK_HOSPITALS: Hospital[] = [
@@ -17,7 +17,7 @@ const MOCK_HOSPITALS: Hospital[] = [
     rating: 3.8,
     userRatingsTotal: 19,
     registered: true,
-    treatTargets: ["강아지", "도마뱀"],
+    animalTypes: ["강아지", "도마뱀"],
   },
   {
     placeId: "ChIJx3KyejpEezUR1x9ygn5NNeU",
@@ -34,7 +34,7 @@ const MOCK_HOSPITALS: Hospital[] = [
     rating: 4.8,
     userRatingsTotal: 26,
     registered: true,
-    treatTargets: ["강아지"],
+    animalTypes: ["강아지"],
   },
 ];
 

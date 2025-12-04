@@ -6,7 +6,7 @@ interface HospitalCardProps {
 }
 
 function HospitalCard({ hospital }: HospitalCardProps) {
-  const { name, address, rating, userRatingsTotal, registered, treatTargets } =
+  const { name, address, rating, userRatingsTotal, registered, animalTypes } =
     hospital;
 
   return (
@@ -33,9 +33,9 @@ function HospitalCard({ hospital }: HospitalCardProps) {
       <p className="mt-2 text-sm text-[#656565]">{address}</p>
 
       {/*진료 대상 태그 (가입 병원만) */}
-      {registered && treatTargets && treatTargets.length > 0 && (
+      {registered && animalTypes && animalTypes.length > 0 && (
         <div className="flex gap-2 mt-2">
-          {treatTargets.map((tag) => (
+          {animalTypes.map((tag) => (
             <span
               key={tag}
               className="px-2 py-0.5 text-sm text-[#f56e6d] border border-[#f56e6d] rounded-[20px]"

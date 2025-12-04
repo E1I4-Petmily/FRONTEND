@@ -29,9 +29,9 @@ export default function HospitalListPage() {
   };
 
   return (
-    <div className=" bg-[#F8F8F8] mt-[-40px] font-[PretendardVariable]">
+    <div className=" bg-[#F8F8F8] mt-4 font-[PretendardVariable]">
       {/* 검색창 */}
-      <div className="flex items-center gap-2 px-5">
+      <div className="flex items-center gap-2 px-6">
         <input
           className="w-full h-[35px] rounded-[15px] border border-[#4c4c4c] px-3 text-xs text-[#1f1f1f]"
           placeholder="검색어를 입력해주세요"
