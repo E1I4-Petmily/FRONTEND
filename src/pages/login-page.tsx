@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/common/Button";
 import Header from "../components/common/Header";
+import { login } from "../apis/user";
 
 export default function LogIn() {
   const navigate = useNavigate();
@@ -13,60 +14,17 @@ export default function LogIn() {
     setFormValid(!!email && !!password);
   }, [email, password]);
 
-  // 임시 연결 코드
-  const handleLogIn = () => {
-    const accessionUser = localStorage.getItem("user");
-    if (!accessionUser) {
-      alert("회원 정보 존재하지 않음");
-      return;
-    }
-    const user = JSON.parse(accessionUser);
-
-    if (email === user.email && password === user.password) {
-      navigate("/onboarding/welcome");
-    } else {
-      alert("이메일 또는 비밀번호가 올바르지 않습니다.");
-    }
-  };
-
-  /*    백엔드 연동 시 사용 코드
   const handleLogIn = async () => {
-    try {
-      const res = await axios.post("/api/users/signin", {
-        email,
-        password,
-      });
-      // 백엔드에서 내려주는 데이터 구조 맞춰서 수정 필요
-      const { token } = res.data;
-      localStorage.setItem("accessToken", token);
+    if (!formValid) return;
 
-      const userRes = await axios.get("/api/pets", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const user = userRes.data;
-
-      if (user.pets && user.pets.length > 0) {
-        navigate("/calendar");
-      } else {
-        navigate("/onboarding/welcome");
-      }
-    } catch (error: any) {
-      console.error("로그인 실패: ", error);
-      alert(
-        error.response?.data?.message ||
-          "이메일 또는 비밀번호가 올바르지 않습니다."
-      );
-    }
+    const token = await login({ username: email, password });
+    if (token) navigate("/calendar");
   };
-  */
 
   return (
     <div className="flex flex-col min-h-screen relative">
       <Header type="default" title="로그인" />
-      <div className="p-4">
+      <div className="p-4 pt-16">
         <div className="mb-4">
           <label className="block text-[16px] font-[PretendardVariable] font-semibold mb-1">
             이메일<span className="text-red-500">*</span>

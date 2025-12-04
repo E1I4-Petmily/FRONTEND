@@ -1,7 +1,7 @@
 import React from "react";
-import CalendarIcon from "../../assets/CalendarIcon";
-import ProfileIcon from "../../assets/ProfileIcon";
-import HospitalIcon from "../../assets/HospitalIcon";
+import CalendarIcon from "../../assets/navigation-bar/CalendarIcon";
+import ProfileIcon from "../../assets/navigation-bar/ProfileIcon";
+import HospitalIcon from "../../assets/navigation-bar/HospitalIcon";
 import { useLocation, useNavigate, matchPath } from "react-router-dom";
 
 const NavigationBar: React.FC = () => {

@@ -1,16 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
-import axios from "axios";
-import cat from "../assets/profile-icons/cat.png";
-import tigercat from "../assets/profile-icons/cheese.png";
-import siba from "../assets/profile-icons/siba.png";
-import dog from "../assets/profile-icons/dog.png";
-import bird from "../assets/profile-icons/bird.png";
-import chick from "../assets/profile-icons/chick.png";
-import hamster from "../assets/profile-icons/hamster.png";
-import rabbit from "../assets/profile-icons/rabbit.png";
-import pig from "../assets/profile-icons/pig.png";
+import { PROFILE_IMAGES } from "../constant/profileImages";
+import { signup } from "../apis/user";
 import Button from "../components/common/Button";
 import Header from "../components/common/Header";
 
@@ -20,22 +12,9 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [nickname, setNickname] = useState("");
-  const [selectedProfileAnimal, setSelectedProfileAnimal] =
-    useState<string>("cat1");
+  const [selectedProfileNumber, setSelectedProfileNumber] = useState<number>(1);
   const [showProfilePicker, setShowProfilePicker] = useState(false);
   const [formValid, setFormValid] = useState(false);
-
-  const animals = [
-    { id: "cat1", src: cat, alt: "고양이1" },
-    { id: "cat2", src: tigercat, alt: "고양이2" },
-    { id: "dog1", src: siba, alt: "강아지1" },
-    { id: "dog2", src: dog, alt: "강아지2" },
-    { id: "bird", src: bird, alt: "앵무새" },
-    { id: "chick", src: chick, alt: "병아리" },
-    { id: "hamster", src: hamster, alt: "햄스터" },
-    { id: "rabbit", src: rabbit, alt: "토끼" },
-    { id: "pig", src: pig, alt: "돼지" },
-  ];
 
   useEffect(() => {
     if (
@@ -51,34 +30,26 @@ export default function SignUp() {
     }
   }, [email, password, passwordConfirm, nickname]);
 
+  const handleSelectProfile = (num: number) => {
+    setSelectedProfileNumber(num);
+    setShowProfilePicker(false);
+  };
+
   const handleSignUp = async () => {
+    if (!formValid) return;
+
     try {
-      const user = {
-        email,
+      await signup({
+        username: email,
         password,
         nickname,
-        profile: selectedProfileAnimal,
-      };
-      // 실제 백엔드 연결 시 사용
-      const res = await axios.post("/api/users/signup", user, {
-        headers: { "Content-Type": "application/json" },
+        userProfile: selectedProfileNumber,
       });
 
-      if (res.status === 201 || res.status === 200) {
-        navigate("/landing");
-      }
-    } catch (err: unknown) {
-      console.error(err);
-
-      // 임시
-      const user = {
-        email,
-        password,
-        nickname,
-        profile: selectedProfileAnimal,
-      };
-      localStorage.setItem("user", JSON.stringify(user));
       navigate("/landing");
+    } catch (err) {
+      console.error(err);
+      alert("회원가입 실패");
     }
   };
 
@@ -86,7 +57,7 @@ export default function SignUp() {
     <div>
       <div className="flex flex-col min-h-screen relative">
         <Header type="default" title="회원가입" />
-        <div className="p-4">
+        <div className="p-4 pt-16">
           <div className="mb-3">
             <label className="block text-[16px] font-[PretendardVariable] font-semibold mb-1">
               이메일<span className="text-red-500">*</span>
@@ -151,7 +122,7 @@ export default function SignUp() {
             onClick={() => setShowProfilePicker(true)}
           >
             <img
-              src={animals.find((p) => p.id === selectedProfileAnimal)?.src}
+              src={PROFILE_IMAGES[selectedProfileNumber]}
               alt="선택된 프로필"
               className="w-12 h-12 object-contain z-10"
             />
@@ -165,25 +136,24 @@ export default function SignUp() {
             <div className="absolute inset-0 bg-black/30 flex items-end justify-center z-50">
               <div className="w-full bg-white p-6 rounded-t-2xl shadow-lg">
                 <div className="grid grid-cols-3 gap-6 place-items-center">
-                  {animals.map((animal) => (
+                  {Object.entries(PROFILE_IMAGES).map(([num, src]) => (
                     <button
-                      key={animal.id}
+                      key={num}
                       type="button"
                       onClick={() => {
-                        setSelectedProfileAnimal(animal.id);
-                        setShowProfilePicker(false);
+                        handleSelectProfile(Number(num));
                       }}
                       className={`w-[100px] h-[100px] rounded-4xl flex items-center justify-center 
               bg-[#F7E3C2] transition border-4 
               ${
-                selectedProfileAnimal === animal.id
+                selectedProfileNumber === Number(num)
                   ? "border-[#F56E6D]"
                   : "border-transparent"
               }`}
                     >
                       <img
-                        src={animal.src}
-                        alt={animal.alt}
+                        src={src}
+                        alt={`프로필 ${num}`}
                         className="w-[70px] h-[70px] object-contain"
                       />
                     </button>
