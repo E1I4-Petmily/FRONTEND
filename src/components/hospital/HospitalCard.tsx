@@ -1,5 +1,5 @@
 import type { Hospital } from "../../apis/hospital-list";
-import starIcon from "../../assets/star.svg";
+import starIcon from "../../assets/hospital-icons/star.svg";
 
 interface HospitalCardProps {
   hospital: Hospital;
