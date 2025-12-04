@@ -11,20 +11,38 @@ import call from "../assets/hospital-icons/call.svg";
 import websiteIcon from "../assets/hospital-icons/website.svg";
 import tag from "../assets/hospital-icons/tag.svg";
 import star from "../assets/hospital-icons/star.svg";
+import hospitalImage from "../assets/hospital-demo-image.png";
 
 import AiSummary from "../components/hospital/AiSummary";
 import ReviewCard from "../components/hospital/ReviewCard";
+import { useNavigate } from "react-router-dom";
 
 const MOCK_DETAIL: HospitalDetail = {
+  photos: null,
+  mainPhotoUrl:
+    "https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photo_reference=DEMO_REF&key=DEMO_KEY",
   name: "비엔동물전문의료센터",
   website: "http://www.petmily.co.kr",
   rating: 4.5,
   types: ["veterinary_care"],
   reviews: [
-    { rating: 5, text: "친절하고 자세하게 설명해주셨어요!" },
+    {
+      rating: 5,
+      text: "의사가 얘기를 잘 들어주며 친절하고 설명을 자세히 해줌. 과잉진료 없음 진료비가 로비에 명시되어 있어서 참고하기 좋음",
+      date: "2024.02.20",
+      author_name: "Yeon Chan JUNG",
+    },
+    {
+      rating: 5,
+      text: "6년째 쭉 이용 중입니다 선생님 진료 잘봐주시고 아이에 대해 과거이력도 다 아시니 진료가 편해요",
+      date: "2021.10.08",
+      author_name: "오봉누나",
+    },
     {
       rating: 4,
-      text: "계절이 지나가는 하늘에는 가을로 가득 차 있습니다. 어머님, 그리고 당신은 멀리 북간도에 계십니다. 계절이 지나가는 하늘에는 가을로 가득 차 있습니다. 그러나, 겨울이 지나고 나의 어머님, 그리고 당신은 멀리 북간도에 계십니다. 별 하나에 추억과 별 하나에 사랑과 별 하나에 ",
+      text: "선생님들모두가친절하고좋아요~",
+      date: "2025.01.04",
+      author_name: "백현미",
     },
   ],
   registered: true,
@@ -44,7 +62,7 @@ const MOCK_DETAIL: HospitalDetail = {
   place_id: "MOCK_PLACE_ID",
   formatted_address: "경기도 부천시 소사구 경인로 475",
   formatted_phone_number: "010-1234-5678",
-  user_ratings_total: 20,
+  user_ratings_total: 159,
   opening_hours: {
     open_now: true,
   },
@@ -52,6 +70,7 @@ const MOCK_DETAIL: HospitalDetail = {
 
 export default function HospitalDetailPage() {
   const [data, setData] = useState<HospitalDetail | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setData(MOCK_DETAIL);
@@ -82,7 +101,7 @@ export default function HospitalDetailPage() {
     <div className="w-full max-w-[480px] mx-auto bg-[#F8F8F8] min-h-screen font-[PretendardVariable] pb-24">
       {/* 병원 기본 이미지 */}
       <img
-        src="/default-hospital.jpg"
+        src={data.mainPhotoUrl ?? hospitalImage}
         alt="병원 이미지"
         className="w-full h-[180px] object-cover bg-gray-100"
       />
@@ -156,7 +175,7 @@ export default function HospitalDetailPage() {
       <AiSummary summary={data.summary} />
 
       {/* 리뷰 리스트 */}
-      <div className="px-6 py-6  bg-white mt-2 ">
+      <div className="px-6 py-6 bg-white mt-2 mb-5">
         <p className="text-lg font-semibold mb-3">리뷰</p>
 
         <div className="flex flex-col gap-3">
@@ -165,8 +184,16 @@ export default function HospitalDetailPage() {
           ))}
         </div>
       </div>
-      <div className="fixed bottom-20 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-white px-6 z-50">
-        <Button bgColor="#F56E6D" activeColor="#c54f4f">
+      <div className="fixed bottom-20 pb-2 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-white px-6 z-50">
+        <Button
+          onClick={() => {
+            if (!data.registered) return;
+            navigate("/hospital/reservation");
+          }}
+          bgColor="#F56E6D"
+          activeColor="#c54f4f"
+          disabled={!data.registered}
+        >
           예약하기
         </Button>
       </div>

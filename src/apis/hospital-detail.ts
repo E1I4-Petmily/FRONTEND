@@ -1,6 +1,8 @@
 export interface Review {
   rating: number;
   text: string;
+  date: string;
+  author_name: string;
 }
 
 export interface SummaryKeyword {
@@ -19,9 +21,11 @@ export interface Summary {
 }
 
 export interface HospitalDetail {
+  photos: null;
+  mainPhotoUrl?: string;
   name: string;
   website?: string;
-  rating: number | null;
+  rating: number | null; //병원 리뷰 평점
   types: string[];
   reviews: Review[];
   registered: boolean; // 펫밀리 가입 여부

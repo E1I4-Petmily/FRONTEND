@@ -28,8 +28,10 @@ export default function ReviewCard({ review }: Props) {
               />
             </div>
 
-            <p className="text-xs font-semibold text-[#1f1f1f]">사용자이름</p>
-            <p className="text-xs text-[#ababab]">2025.09.01</p>
+            <p className="text-xs font-semibold text-[#1f1f1f]">
+              {review.author_name}
+            </p>
+            <p className="text-xs text-[#ababab]">{review.date}</p>
           </div>
 
           {/* 별점 */}
