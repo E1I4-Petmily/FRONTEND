@@ -40,7 +40,7 @@ export default function AiSummary({ summary }: Props) {
         <p className="text-lg font-semibold">AI 요약</p>
       </div>
 
-      <div className="flex gap-13 mt-3">
+      <div className="flex justify-between mt-3">
         {/* 그래프 */}
         <div className="w-[130px] h-[130px] relative">
           <svg width="130" height="130">
@@ -95,7 +95,7 @@ export default function AiSummary({ summary }: Props) {
           </svg>
         </div>
 
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 px-12">
           {/* 긍정 */}
           <div>
             <div className="flex items-center gap-2">
