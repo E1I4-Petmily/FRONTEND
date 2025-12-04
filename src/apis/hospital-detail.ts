@@ -5,7 +5,7 @@ export interface Review {
 
 export interface SummaryKeyword {
   term: string; //키워드(친절 등)
-  sentiment: "POSITIVE" | "NEGATIVE"; // 긍정, 중립, 부정 판별
+  sentiment: "POSITIVE" | "NEGATIVE" | "NEUTRAL"; // 긍정, 중립, 부정 판별
   count: number; // 키워드 개수
   ratio: number; // 전체 리뷰 개수 대비 키워드 출현 비율
 }
