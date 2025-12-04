@@ -17,11 +17,13 @@ import Color from "./pages/register/color-page";
 import Completion from "./pages/register/completion-page";
 import PetEdit from "./pages/pet-edit-page";
 import ReportListPage from "./pages/report-list-page";
+import HospitalListPage from "./pages/hospital-list-page";
 import BehaviorPage from "./pages/record/behavior-page";
 import AppearancePage from "./pages/record/appearance-page";
 import ReactionPage from "./pages/record/reaction-page";
 import ReservationPage from "./pages/reservation-page";
 import PDFSummaryPage from "./pages/pdf-summary-page";
+import HospitalDetailPage from "./pages/hospital-detail-page";
 
 const publicRoutes: RouteObject[] = [
   {
@@ -54,7 +56,12 @@ const protectedRoutes: RouteObject[] = [
       { path: "calendar/appearance", element: <AppearancePage /> },
       { path: "calendar/reaction", element: <ReactionPage /> },
       { path: "calendar/summary", element: <PDFSummaryPage /> },
+      { path: "hospital", element: <HospitalListPage /> },
       { path: "hospital/reservation", element: <ReservationPage /> },
+      {
+        path: "/hospital/:placeId",
+        element: <HospitalDetailPage />,
+      },
     ],
   },
 ];
