@@ -1,16 +1,29 @@
 import type { Hospital } from "../../apis/hospital-list";
 import starIcon from "../../assets/hospital-icons/star.svg";
+import { useNavigate } from "react-router-dom";
 
 interface HospitalCardProps {
   hospital: Hospital;
 }
 
 function HospitalCard({ hospital }: HospitalCardProps) {
-  const { name, address, rating, userRatingsTotal, registered, animalTypes } =
-    hospital;
+  const {
+    placeId,
+    name,
+    address,
+    rating,
+    userRatingsTotal,
+    registered,
+    animalTypes,
+  } = hospital;
+
+  const navigate = useNavigate();
 
   return (
-    <div className="px-6 py-5 border-b border-[#D1D1D1] bg-[#F8F8F8]">
+    <div
+      onClick={() => navigate(`/hospital/${placeId}`)}
+      className="px-6 py-5 border-b border-[#D1D1D1] bg-[#F8F8F8]"
+    >
       {/* 병원 이름 */}
       <p className="text-base font-semibold text-[#1f1f1f]">{name}</p>
 
