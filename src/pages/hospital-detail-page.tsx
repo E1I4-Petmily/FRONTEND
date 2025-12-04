@@ -16,6 +16,7 @@ import hospitalImage from "../assets/hospital-demo-image.png";
 import AiSummary from "../components/hospital/AiSummary";
 import ReviewCard from "../components/hospital/ReviewCard";
 import { useNavigate } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 
 const MOCK_DETAIL: HospitalDetail = {
   photos: null,
@@ -69,12 +70,19 @@ const MOCK_DETAIL: HospitalDetail = {
 };
 
 export default function HospitalDetailPage() {
+  const setHeaderTitle = useOutletContext<(title: string) => void>();
   const [data, setData] = useState<HospitalDetail | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     setData(MOCK_DETAIL);
   }, []);
+
+  useEffect(() => {
+    if (data?.name && setHeaderTitle) {
+      setHeaderTitle(data.name);
+    }
+  }, [data]);
 
   if (!data) return <p className="p-5">로딩중...</p>;
   /* const { placeId } = useParams();
