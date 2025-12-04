@@ -28,7 +28,7 @@ export interface HospitalDetail {
   hospitalAccountId?: number; // 펫밀리 가입되어있으면 병원 고유 식별자
   animalTypes?: string[]; // 진료 대상 동물 종류
 
-  summary?: Summary; //AI 요약 데이터
+  summary: Summary; //AI 요약 데이터
 
   place_id: string; // 구글맵 고유 식별자
   formatted_address: string; // 구글맵에 등록된 주소
@@ -44,4 +44,10 @@ export interface HospitalDetail {
 export interface HospitalDetailResponse {
   status: string;
   result: HospitalDetail;
+}
+
+export async function getHospitalDetail(placeId: string) {
+  const res = await fetch(`/api/v1/hospitals/${placeId}`);
+  const data: HospitalDetailResponse = await res.json();
+  return data.result;
 }
