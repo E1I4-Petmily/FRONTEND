@@ -1,9 +1,12 @@
 import { matchPath, Outlet, useLocation } from "react-router-dom";
 import Header from "../components/common/Header";
 import NavigationBar from "../components/common/NavigationBar";
+import { useState } from "react";
 
 const ProtectedLayout = () => {
   const location = useLocation();
+  const [dynamicTitle, setDynamicTitle] = useState("");
+  const isHospitalDetail = matchPath("/hospital/:placeId", location.pathname);
 
   const showNav = ["/calendar/*", "/mypage/*", "hospital/*"];
 
@@ -34,12 +37,14 @@ const ProtectedLayout = () => {
 
   const title = pageTitles[location.pathname] || "";
 
+  const finalTitle = isHospitalDetail && dynamicTitle ? dynamicTitle : title;
+
   return (
     <div className="flex justify-center min-h-screen">
       <div className="relative w-full max-w-[480px] min-h-screen bg-[#F8F8F8]">
         <Header
           type={isCalendar ? "logoOnly" : hasArrow ? "default" : "titleOnly"}
-          title={title}
+          title={finalTitle}
           bgColor={
             location.pathname === "/hospital/reservation"
               ? "#FFFFFF"
@@ -47,7 +52,7 @@ const ProtectedLayout = () => {
           }
         />
         <div className="pt-12">
-          <Outlet />
+          <Outlet context={setDynamicTitle} />
           {showNavBar && <NavigationBar />}
         </div>
       </div>
