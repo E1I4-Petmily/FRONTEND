@@ -54,3 +54,14 @@ export async function getUserProfile(): Promise<UserResponse> {
 
   return response.data;
 }
+
+export interface UserInfoResponse {
+  id: number;
+  nickname: string;
+  userProfile: number;
+}
+
+export async function getUserInfo() {
+  const res = await axiosInstance.get<UserInfoResponse>("/api/v1/users/me");
+  return res.data;
+}

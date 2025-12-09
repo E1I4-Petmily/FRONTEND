@@ -213,7 +213,7 @@ export default function CalendarPage() {
                     />
                   </div>
 
-                  <span className="font-[PretendardVariable] font-light text-[#2C2C2C] font-medium text-[12px]">
+                  <span className="font-[PretendardVariable] font-light text-[#2C2C2C] text-[12px]">
                     {item.label}
                   </span>
                 </button>

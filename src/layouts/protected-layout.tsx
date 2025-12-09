@@ -1,11 +1,19 @@
 import { matchPath, Outlet, useLocation } from "react-router-dom";
 import Header from "../components/common/Header";
 import NavigationBar from "../components/common/NavigationBar";
+import { useState } from "react";
 
 const ProtectedLayout = () => {
   const location = useLocation();
+  const [dynamicTitle, setDynamicTitle] = useState("");
+  const isHospitalDetail = matchPath("/hospital/:placeId", location.pathname);
 
   const showNav = ["/calendar/*", "/mypage/*", "hospital/*"];
+  const hideHeader = ["/hospital"];
+
+  const shouldHideHeader = hideHeader.some((pattern) =>
+    matchPath({ path: pattern, end: true }, location.pathname)
+  );
 
   const showNavBar = showNav.some((pattern) =>
     matchPath({ path: pattern, end: false }, location.pathname)
@@ -13,7 +21,12 @@ const ProtectedLayout = () => {
 
   const isCalendar = !!matchPath("/calendar", location.pathname);
 
-  const hideArrowPages = ["/calendar", "/mypage", "/register/completion"];
+  const hideArrowPages = [
+    "/calendar",
+    "/mypage",
+    "/register/completion",
+    "/hospital",
+  ];
   const hasArrow = !hideArrowPages.includes(location.pathname);
 
   const pageTitles: Record<string, string> = {
@@ -29,20 +42,24 @@ const ProtectedLayout = () => {
 
   const title = pageTitles[location.pathname] || "";
 
+  const finalTitle = isHospitalDetail && dynamicTitle ? dynamicTitle : title;
+
   return (
     <div className="flex justify-center min-h-screen">
       <div className="relative w-full max-w-[480px] min-h-screen bg-[#F8F8F8]">
-        <Header
-          type={isCalendar ? "logoOnly" : hasArrow ? "default" : "titleOnly"}
-          title={title}
-          bgColor={
-            location.pathname === "/hospital/reservation"
-              ? "#FFFFFF"
-              : undefined
-          }
-        />
+        {!shouldHideHeader && (
+          <Header
+            type={isCalendar ? "logoOnly" : hasArrow ? "default" : "titleOnly"}
+            title={finalTitle}
+            bgColor={
+              location.pathname === "/hospital/reservation"
+                ? "#FFFFFF"
+                : undefined
+            }
+          />
+        )}
         <div className="pt-12">
-          <Outlet />
+          <Outlet context={setDynamicTitle} />
           {showNavBar && <NavigationBar />}
         </div>
       </div>
