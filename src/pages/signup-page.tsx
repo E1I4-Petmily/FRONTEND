@@ -46,7 +46,7 @@ export default function SignUp() {
         userProfile: selectedProfileNumber,
       });
 
-      navigate("/landing");
+      navigate("/");
     } catch (err) {
       console.error(err);
       alert("회원가입 실패");
