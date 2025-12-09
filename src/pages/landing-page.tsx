@@ -23,8 +23,11 @@ export default function Landing() {
       </div>
 
       <div className="absolute bottom-10 left-0 w-full px-[10px]">
-        <p className="text-[14px] text-[#ABABAB] font-[PretendardVariable] text-center">
-          로그인하고 나의 가족을 관리하세요
+        <p
+          className=" text-[14px] font-semibold font-[PretendardVariable] text-center text-neutral-500 cursor-pointer underline"
+          onClick={() => navigate("/hospitalsignup")}
+        >
+          병원계정으로 회원가입하기
         </p>
         <div className="flex flex-col mt-2 gap-2">
           <Button
