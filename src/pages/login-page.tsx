@@ -16,9 +16,22 @@ export default function LogIn() {
 
   const handleLogIn = async () => {
     if (!formValid) return;
+    const response = await login({ username: email, password });
 
-    const token = await login({ username: email, password });
-    if (token) navigate("/calendar");
+    if (!response) return;
+
+    const { accessToken, userRole } = response;
+
+    //토큰 저장
+    localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("userRole", userRole);
+
+    //역할별 분기
+    if (userRole === "ROLE_USER") {
+      navigate("/calendar"); //일반유저
+    } else {
+      navigate("/hospital/home"); //병원
+    }
   };
 
   return (
