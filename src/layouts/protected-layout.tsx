@@ -2,6 +2,7 @@ import { matchPath, Outlet, useLocation } from "react-router-dom";
 import Header from "../components/common/Header";
 import NavigationBar from "../components/common/NavigationBar";
 import { useState } from "react";
+import HospitalNav from "../components/common/HospitalNav";
 
 const ProtectedLayout = () => {
   const location = useLocation();
@@ -60,7 +61,12 @@ const ProtectedLayout = () => {
         )}
         <div className="pt-12">
           <Outlet context={setDynamicTitle} />
-          {showNavBar && <NavigationBar />}
+          {showNavBar &&
+            (location.pathname === "/hospital/home" ? (
+              <HospitalNav />
+            ) : (
+              <NavigationBar />
+            ))}
         </div>
       </div>
     </div>
