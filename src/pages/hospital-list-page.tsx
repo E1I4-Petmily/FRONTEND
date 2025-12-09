@@ -8,16 +8,14 @@ export default function HospitalListPage() {
   const [hospitals, setHospitals] = useState<Hospital[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // 목데이터
   useEffect(() => {
-    const fetchInitial = async () => {
+    const fetchList = async () => {
       setLoading(true);
       const data = await getHospitals("");
       setHospitals(data);
       setLoading(false);
     };
-
-    fetchInitial();
+    fetchList();
   }, []);
 
   //검색 버튼, 엔터 눌렀을 때
@@ -29,7 +27,7 @@ export default function HospitalListPage() {
   };
 
   return (
-    <div className=" bg-[#F8F8F8] mt-4 font-[PretendardVariable]">
+    <div className=" bg-[#F8F8F8] font-[PretendardVariable]">
       {/* 검색창 */}
       <div className="flex items-center gap-2 px-6">
         <input

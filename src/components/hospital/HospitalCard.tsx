@@ -34,11 +34,7 @@ function HospitalCard({ hospital }: HospitalCardProps) {
           {rating !== null ? rating.toFixed(1) : "-"}
         </p>
         <p className="text-sm text-[#1f1f1f]">
-          (
-          {userRatingsTotal !== null && userRatingsTotal > 0
-            ? `${userRatingsTotal}+`
-            : "0"}
-          )
+          ({userRatingsTotal !== null ? userRatingsTotal : 0})
         </p>
       </div>
 
