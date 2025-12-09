@@ -28,6 +28,7 @@ export default function MyPage() {
 
         const pets = await getPetList();
         setPetList(pets);
+        console.log("반려동물정보", pets);
       } catch (error) {
         console.error("마이페이지 데이터 로드 실패", error);
       }
