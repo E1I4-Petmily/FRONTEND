@@ -9,6 +9,11 @@ const ProtectedLayout = () => {
   const isHospitalDetail = matchPath("/hospital/:placeId", location.pathname);
 
   const showNav = ["/calendar/*", "/mypage/*", "hospital/*"];
+  const hideHeader = ["/hospital"];
+
+  const shouldHideHeader = hideHeader.some((pattern) =>
+    matchPath({ path: pattern, end: true }, location.pathname)
+  );
 
   const showNavBar = showNav.some((pattern) =>
     matchPath({ path: pattern, end: false }, location.pathname)
@@ -42,15 +47,17 @@ const ProtectedLayout = () => {
   return (
     <div className="flex justify-center min-h-screen">
       <div className="relative w-full max-w-[480px] min-h-screen bg-[#F8F8F8]">
-        <Header
-          type={isCalendar ? "logoOnly" : hasArrow ? "default" : "titleOnly"}
-          title={finalTitle}
-          bgColor={
-            location.pathname === "/hospital/reservation"
-              ? "#FFFFFF"
-              : undefined
-          }
-        />
+        {!shouldHideHeader && (
+          <Header
+            type={isCalendar ? "logoOnly" : hasArrow ? "default" : "titleOnly"}
+            title={finalTitle}
+            bgColor={
+              location.pathname === "/hospital/reservation"
+                ? "#FFFFFF"
+                : undefined
+            }
+          />
+        )}
         <div className="pt-12">
           <Outlet context={setDynamicTitle} />
           {showNavBar && <NavigationBar />}
