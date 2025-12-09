@@ -24,6 +24,7 @@ import ReactionPage from "./pages/record/reaction-page";
 import ReservationPage from "./pages/reservation-page";
 import PDFSummaryPage from "./pages/pdf-summary-page";
 import HospitalDetailPage from "./pages/hospital-detail-page";
+import HospitalSignUp from "./pages/hospital-signup-page";
 
 const publicRoutes: RouteObject[] = [
   {
@@ -33,6 +34,7 @@ const publicRoutes: RouteObject[] = [
       { path: "landing", element: <Landing /> },
       { path: "signup", element: <SignUp /> },
       { path: "login", element: <LogIn /> },
+      { path: "hospitalsignup", element: <HospitalSignUp /> },
     ],
   },
 ];
@@ -59,7 +61,7 @@ const protectedRoutes: RouteObject[] = [
       { path: "hospital", element: <HospitalListPage /> },
       { path: "hospital/reservation", element: <ReservationPage /> },
       {
-        path: "/hospital/:placeId",
+        path: "hospital/:placeId",
         element: <HospitalDetailPage />,
       },
     ],
