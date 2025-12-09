@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Picker from "react-mobile-picker";
 import Button from "../components/common/Button";
+import { petEdit } from "../apis/pet-edit";
 
 interface EditPageState {
   petId: number;
@@ -111,29 +112,10 @@ function PetEditPage() {
       birthDate,
     };
 
-    const formData = new FormData();
-    formData.append(
-      "requestDto",
-      new Blob([JSON.stringify(requestDto)], {
-        type: "application/json",
-      })
-    );
-
-    //사진 새로 선택시에만 전송
-    if (photoFile) {
-      formData.append("petImage", photoFile);
-    }
-
     try {
-      const res = await fetch(`/api/v1/pets/${petId}`, {
-        method: "PATCH",
-        body: formData,
-      });
+      await petEdit(petId, requestDto, photoFile || undefined);
 
-      if (!res.ok) {
-        throw new Error("반려동물 수정 실패");
-      }
-
+      alert("반려동물 정보가 수정되었습니다!");
       navigate(-1);
     } catch (err) {
       console.error(err);
@@ -142,7 +124,7 @@ function PetEditPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#F9F9F9] font-[PretendardVariable]">
+    <div className="relative min-h-screen bg-[#F9F9F9] mt-4 font-[PretendardVariable]">
       <main className="px-6 pb-32">
         <div className="mb-6">
           <label className="block mb-2 text-lg font-semibold">이름</label>
