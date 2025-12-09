@@ -90,18 +90,15 @@ export default function CalendarPage() {
         onDateSelect={(date) => setSelectedDate(date)}
         selectedDate={selectedDate}
         events={calendarEvents}
-        getDayStyle={({ isToday, isSelected }) => {
-          if (isToday) return "bg-[#F56E6D] text-white rounded-full";
-          if (isSelected)
-            return "border-[1.5px] border-[#F56E6D] hover:bg-[#F56E6D] rounded-full";
-          return "text-gray-700 hover:bg-gray-100";
+        getDayStyle={({ isToday }) => {
+          return isToday ? "text-[#FFFFFF]" : "text-gray-700 hover:bg-gray-100";
         }}
         renderEventDot={(events) => (
           <div className="flex gap-0.5">
             {events.slice(0, 3).map((evt, idx) => (
               <div
                 key={idx}
-                className="w-1 h-1 rounded-full"
+                className="w-1.5 h-1.5 rounded-full"
                 style={{ backgroundColor: evt.color }}
               />
             ))}
