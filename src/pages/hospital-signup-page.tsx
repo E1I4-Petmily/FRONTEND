@@ -3,6 +3,8 @@ import Button from "../components/common/Button";
 import Header from "../components/common/Header";
 import searchIcon from "../assets/search-black.svg";
 import { searchHospitals, type HospitalSearchResult } from "../apis/hospital";
+import { registerHospital } from "../apis/hospital";
+import { useNavigate } from "react-router-dom";
 
 export default function HospitalSignUp() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -23,6 +25,8 @@ export default function HospitalSignUp() {
   const [departments, setDepartments] = useState("");
   const [businessHours, setBusinessHours] = useState("");
 
+  const navigate = useNavigate();
+
   const handleSearchChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchText(value);
@@ -41,6 +45,45 @@ export default function HospitalSignUp() {
     setAddress(item.address); // 주소 자동 저장
     setPlaceId(item.placeId);
     setIsSearchOpen(false);
+  };
+
+  const handleRegister = async () => {
+    //비밀번호 확인
+    if (password !== passwordConfirm) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
+    //필수 값 체크
+    if (!hospitalName || !address || !username || !password) {
+      alert("필수 항목을 입력해주세요.");
+      return;
+    }
+
+    const body = {
+      username,
+      password,
+      nickname: hospitalName, //병원명으로 설정
+      userProfile: 1, //임시 값
+      managerName,
+      managerPhone,
+      hospitalName,
+      representativeName,
+      address,
+      animalTypes,
+      departments,
+      businessHours,
+      placeId,
+    };
+
+    try {
+      await registerHospital(body);
+      alert("병원 회원가입이 완료되었습니다!");
+      navigate("/landing", { replace: true });
+    } catch (err) {
+      console.error(err);
+      alert("회원가입에 실패했습니다.");
+    }
   };
 
   return (
@@ -67,7 +110,7 @@ export default function HospitalSignUp() {
             </div>
           </div>
 
-          {/* 병원 주소 (검색 선택 후 자동 입력) */}
+          {/* 병원 주소 검색 선택 후 자동 입력 */}
           <div className="flex flex-col">
             <label className="text-[16px] font-semibold mb-1">병원 주소</label>
             <input
@@ -201,9 +244,12 @@ export default function HospitalSignUp() {
         </div>
       </div>
 
-      {/* 버튼 */}
       <div className="fixed bottom-0 pb-5 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-white px-6 z-50">
-        <Button bgColor="#F56E6D" activeColor="#c54f4f">
+        <Button
+          bgColor="#F56E6D"
+          activeColor="#c54f4f"
+          onClick={handleRegister}
+        >
           회원가입
         </Button>
       </div>
@@ -211,7 +257,6 @@ export default function HospitalSignUp() {
       {/* 검색 모달 */}
       {isSearchOpen && (
         <>
-          {/* 배경 */}
           <div
             className="fixed inset-0 bg-black/40 z-[9998]"
             onClick={() => setIsSearchOpen(false)}
