@@ -1,25 +1,56 @@
-import catIcon from "../assets/profile-icons/cat.png";
 import PetCard from "../components/mypage/PetCard";
-import cat1 from "../assets/고양이1.jpg";
 import pencil from "../assets/pencil.svg";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getUserInfo } from "../apis/user";
+import { getPetList } from "../apis/pet";
+import type { UserInfoResponse } from "../apis/user";
+import type { PetResponse } from "../apis/pet";
+import { getProfileIcon } from "../utils/profileIcon";
 
 export default function MyPage() {
   const navigate = useNavigate();
+
+  //상태추가
+  const [userInfo, setUserInfo] = useState<UserInfoResponse | null>(null);
+  const [petList, setPetList] = useState<PetResponse[]>([]);
 
   const handleReportClick = (petId: number) => {
     navigate("/mypage/reports", { state: { petId } });
   };
 
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const user = await getUserInfo();
+        setUserInfo(user);
+        console.log("내정보", user);
+
+        const pets = await getPetList();
+        setPetList(pets);
+      } catch (error) {
+        console.error("마이페이지 데이터 로드 실패", error);
+      }
+    }
+
+    fetchData();
+  }, []);
+
   return (
     <div className="px-6 pb-24 font-[PretendardVariable]">
       <div className="flex flex-col items-center">
         <div className="w-[100px] h-[100px] bg-[#f7e3c2] rounded-[40px] flex items-center justify-center">
-          <img src={catIcon} alt="profile icon" className="w-[70px]" />
+          <img
+            src={getProfileIcon(userInfo?.userProfile)}
+            alt="profile icon"
+            className="w-[70px]"
+          />
         </div>
 
         <div className="flex items-center gap-1 mt-4">
-          <p className="text-xl font-semibold">식빵엄마</p>
+          <p className="text-xl font-semibold">
+            {userInfo ? userInfo.nickname : ""}
+          </p>
           <img src={pencil} alt="edit" className="w-7 h-7" />
         </div>
       </div>
@@ -30,24 +61,15 @@ export default function MyPage() {
         <p className="text-sm font-semibold">PDF 요약 리포트</p>
 
         <div className="flex flex-col gap-2 mt-3">
-          <button
-            className="text-base font-medium text-left"
-            onClick={() => handleReportClick(1)}
-          >
-            식빵
-          </button>
-          <button
-            className="text-base font-medium text-left"
-            onClick={() => handleReportClick(2)}
-          >
-            쿠키
-          </button>
-          <button
-            className="text-base font-medium text-left"
-            onClick={() => handleReportClick(3)}
-          >
-            고먐미
-          </button>
+          {petList.map((pet) => (
+            <button
+              key={pet.petId}
+              className="text-base font-medium text-left"
+              onClick={() => handleReportClick(pet.petId)}
+            >
+              {pet.name}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -56,35 +78,18 @@ export default function MyPage() {
       <p className="text-sm font-semibold mb-3">내 반려동물</p>
 
       <div className="grid grid-cols-2 gap-7">
-        <PetCard
-          type="normal"
-          petId={1}
-          name="식빵"
-          gender="수컷"
-          birthDate="2023-10-04"
-          petImageUrl={cat1}
-          colorHex="#00c8b3"
-        />
-
-        <PetCard
-          type="normal"
-          petId={2}
-          name="쿠키"
-          gender="수컷"
-          birthDate="2023-10-04"
-          petImageUrl={cat1}
-          colorHex="#00c8b3"
-        />
-
-        <PetCard
-          type="normal"
-          petId={3}
-          name="고먐미"
-          gender="수컷"
-          birthDate="2023-10-04"
-          petImageUrl={cat1}
-          colorHex="#FFCC00"
-        />
+        {petList.map((pet) => (
+          <PetCard
+            key={pet.petId}
+            type="normal"
+            petId={pet.petId}
+            name={pet.name}
+            gender={pet.gender}
+            birthDate={pet.birthDate}
+            petImageUrl={pet.petImageUrl}
+            colorHex="#00c8b3"
+          />
+        ))}
         <PetCard type="add" onAddClick={() => alert("추가버튼 클릭")} />
       </div>
     </div>
