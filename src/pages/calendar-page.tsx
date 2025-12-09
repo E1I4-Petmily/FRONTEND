@@ -1,9 +1,8 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CustomCalendar, {
   type CalendarEvent,
 } from "../components/CustomCalendar";
 import { MOCK_PETS, MOCK_LOGS } from "../mocks/mockPets";
-import type { Pet } from "../types/pet";
 import pencil from "../assets/pencil.svg";
 import Button from "../components/common/Button";
 import weightIcon from "../assets/record-icons/weight.svg";
@@ -12,18 +11,35 @@ import appearanceIcon from "../assets/record-icons/bandage.svg";
 import periodIcon from "../assets/record-icons/poop.svg";
 import { useNavigate } from "react-router-dom";
 import Picker from "react-mobile-picker";
+import { getPetList, type PetResponse } from "../apis/pet";
 
 export default function CalendarPage() {
   const today = new Date();
+  const [pets, setPets] = useState<PetResponse[]>([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState<Date>(today);
-  const [selectedPet, setSelectedPet] = useState<Pet | null>(null);
+  const [selectedPet, setSelectedPet] = useState<PetResponse | null>(null);
   const [showRecordPicker, setShowRecordPicker] = useState(false);
   const [showWeightPicker, setShowWeightPicker] = useState(false);
   const [pickerValue, setPickerValue] = useState({
     kg: "00",
     decimal: "00",
   });
+
+  useEffect(() => {
+    const fetchPets = async () => {
+      try {
+        const res = await getPetList();
+        setPets(res);
+      } catch (err) {
+        console.error("반려동물 목록 조회 실패:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPets();
+  }, []);
 
   const numbers = Array.from({ length: 100 }, (_, i) =>
     String(i).padStart(2, "0")
@@ -43,7 +59,7 @@ export default function CalendarPage() {
     return `${date.getMonth() + 1}월 ${date.getDate()}일(${dayNames[date.getDay()]})`;
   };
 
-  const handlePetEditClick = (pet: Pet) => {
+  const handlePetEditClick = (pet: PetResponse) => {
     setSelectedPet(pet);
   };
 
@@ -71,6 +87,14 @@ export default function CalendarPage() {
     return events;
   }, []);
 
+  if (loading) {
+    return (
+      <div className="p-4 min-h-screen flex items-center justify-center">
+        <div className="animate-spin w-8 h-8 border-4 border-gray-300 border-t-[#F56E6D] rounded-full"></div>
+      </div>
+    );
+  }
+
   return (
     <div
       className="p-4 min-h-screen"
@@ -90,18 +114,15 @@ export default function CalendarPage() {
         onDateSelect={(date) => setSelectedDate(date)}
         selectedDate={selectedDate}
         events={calendarEvents}
-        getDayStyle={({ isToday, isSelected }) => {
-          if (isToday) return "bg-[#F56E6D] text-white rounded-full";
-          if (isSelected)
-            return "border-[1.5px] border-[#F56E6D] hover:bg-[#F56E6D] rounded-full";
-          return "text-gray-700 hover:bg-gray-100";
+        getDayStyle={({ isToday }) => {
+          return isToday ? "text-[#FFFFFF]" : "text-gray-700";
         }}
         renderEventDot={(events) => (
           <div className="flex gap-0.5">
             {events.slice(0, 3).map((evt, idx) => (
               <div
                 key={idx}
-                className="w-1 h-1 rounded-full"
+                className="w-1.5 h-1.5 rounded-full"
                 style={{ backgroundColor: evt.color }}
               />
             ))}
@@ -116,15 +137,18 @@ export default function CalendarPage() {
           </div>
 
           <div className="flex flex-col gap-3">
-            {MOCK_PETS.map((pet) => {
+            {pets.map((pet) => {
               const dateKey = selectedDate.toISOString().split("T")[0];
-              const symptoms = petSymptomsByDate[dateKey]?.[pet.id] || [];
+              const symptoms = petSymptomsByDate[dateKey]?.[pet.petId] || [];
 
               return (
-                <div key={pet.id} className="flex items-start gap-3 rounded-lg">
+                <div
+                  key={pet.petId}
+                  className="flex items-start gap-3 rounded-lg"
+                >
                   <div
                     className="w-2 h-6.5 rounded-md"
-                    style={{ backgroundColor: pet.color }}
+                    style={{ backgroundColor: pet.colorHex }}
                   />
 
                   <div className="flex-1">
@@ -141,7 +165,7 @@ export default function CalendarPage() {
                           >
                             <span
                               className="w-2 h-2 rounded-full"
-                              style={{ backgroundColor: pet.color }}
+                              style={{ backgroundColor: pet.colorHex }}
                             />
                             {s}
                           </span>
@@ -167,7 +191,7 @@ export default function CalendarPage() {
       )}
       {showRecordPicker && (
         <div className="fixed inset-0 bg-black/30 flex items-end justify-center z-50">
-          <div className="w-full bg-white pb-6 px-[10px] rounded-t-2xl shadow-lg">
+          <div className="w-full max-w-[480px] mx-auto bg-white pb-6 px-[10px] rounded-t-2xl shadow-lg">
             <div className="text-left text-lg font-semibold mb-4 pl-4 mt-4">
               {selectedPet?.name} 기록하기
             </div>
