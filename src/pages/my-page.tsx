@@ -37,7 +37,7 @@ export default function MyPage() {
   }, []);
 
   return (
-    <div className="px-6 pb-24 font-[PretendardVariable]">
+    <div className="px-6 pb-24 mt-4 font-[PretendardVariable]">
       <div className="flex flex-col items-center">
         <div className="w-[100px] h-[100px] bg-[#f7e3c2] rounded-[40px] flex items-center justify-center">
           <img
@@ -90,7 +90,7 @@ export default function MyPage() {
             colorHex="#00c8b3"
           />
         ))}
-        <PetCard type="add" onAddClick={() => alert("추가버튼 클릭")} />
+        <PetCard type="add" onAddClick={() => navigate("/register/welcome")} />
       </div>
     </div>
   );
