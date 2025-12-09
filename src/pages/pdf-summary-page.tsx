@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import calendarIcon from "../assets/mini-calendar.svg";
 import Button from "../components/common/Button";
+import { createPdfSummary } from "../apis/pdf";
 
 export default function PDFSummaryPage() {
   const now = new Date();
@@ -12,6 +13,7 @@ export default function PDFSummaryPage() {
   const [title, setTitle] = useState("");
   const [startDate, setStartDate] = useState<Date>(firstDay);
   const [endDate, setEndDate] = useState<Date>(lastDay);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -20,6 +22,40 @@ export default function PDFSummaryPage() {
       document.body.style.overflow = "auto";
     };
   }, []);
+
+  const formatDate = (date: Date) => {
+    return date.toISOString().split("T")[0]; // YYYY-MM-DD 형태
+  };
+
+  const handleSubmit = async () => {
+    if (!title.trim()) {
+      alert("리포트 제목을 입력해주세요");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const data = {
+        title,
+        startDate: formatDate(startDate),
+        endDate: formatDate(endDate),
+      };
+
+      console.log("📤 PDF 요약 API 요청:", data);
+
+      const response = await createPdfSummary(data);
+
+      console.log("📥 API 응답:", response);
+
+      alert("PDF 요약 리포트 생성 요청이 완료되었습니다!");
+    } catch (error) {
+      console.error(error);
+      alert("PDF 리포트 생성 중 오류가 발생했습니다.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-screen relative">
@@ -75,8 +111,13 @@ export default function PDFSummaryPage() {
 
             <span className="text-[#9A9A9A] text-[14px]">까지</span>
             <div className="absolute bottom-35 left-0 w-full px-[10px]">
-              <Button bgColor="#F56E6D" activeColor="#c54f4f">
-                생성하기
+              <Button
+                onClick={handleSubmit}
+                bgColor="#F56E6D"
+                activeColor="#c54f4f"
+                disabled={loading}
+              >
+                {loading ? "생성 중..." : "생성하기"}
               </Button>
             </div>
           </div>

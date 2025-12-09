@@ -30,7 +30,7 @@ const publicRoutes: RouteObject[] = [
     path: "/",
     element: <PublicLayout />,
     children: [
-      { path: "landing", element: <Landing /> },
+      { index: true, element: <Landing /> },
       { path: "signup", element: <SignUp /> },
       { path: "login", element: <LogIn /> },
     ],

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import CustomCalendar from "../components/CustomCalendar";
+import Button from "../components/common/Button";
 
 export default function ReservationPage() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -132,7 +133,7 @@ export default function ReservationPage() {
       {selectedDate && <div className="h-3 bg-[#F8F8F8] w-full" />}
 
       {selectedDate && (
-        <div className="mt-3 p-4 bg-white pb-20">
+        <div className="mt-3 p-4 bg-white pb-40">
           <div className="font-[PretendardVariable] font-medium mb-2">
             AI 요약 리포트 첨부 여부를 알려주세요
           </div>
@@ -151,6 +152,12 @@ export default function ReservationPage() {
           </p>
         </div>
       )}
+
+      <div className="fixed bottom-20 py-2 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-white px-3 z-50">
+        <Button onClick={() => {}} bgColor="#F56E6D" activeColor="#c54f4f">
+          예약하기
+        </Button>
+      </div>
     </div>
   );
 }

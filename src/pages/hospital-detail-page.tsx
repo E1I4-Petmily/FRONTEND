@@ -133,7 +133,7 @@ export default function HospitalDetailPage() {
           ))}
         </div>
       </div>
-      <div className="fixed bottom-20 py-2 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-white px-6 z-50">
+      <div className="fixed bottom-20 py-2 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-white px-3 z-50">
         <Button
           onClick={() => {
             if (!data.registered) return;
