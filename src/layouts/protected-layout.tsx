@@ -20,6 +20,10 @@ const ProtectedLayout = () => {
     matchPath({ path: pattern, end: false }, location.pathname)
   );
 
+  const hospitalNavPages = ["/hospital/home", "/hospital/mypage"];
+
+  const isHospitalNavPage = hospitalNavPages.includes(location.pathname);
+
   const isCalendar = !!matchPath("/calendar", location.pathname);
 
   const hideArrowPages = [
@@ -70,12 +74,7 @@ const ProtectedLayout = () => {
         <div className="pt-12">
           <Outlet context={setDynamicTitle} />
           {showNavBar &&
-            (location.pathname === "/hospital/home" ||
-            location.pathname === "hospital/mypage" ? (
-              <HospitalNav />
-            ) : (
-              <NavigationBar />
-            ))}
+            (isHospitalNavPage ? <HospitalNav /> : <NavigationBar />)}
         </div>
       </div>
     </div>
