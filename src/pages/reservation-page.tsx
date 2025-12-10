@@ -17,8 +17,6 @@ export default function ReservationPage() {
   const [reportAgree, setReportAgree] = useState(false); //체크박스 상태
   const [showReportModal, setShowReportModal] = useState(false); //모달 표시 여부
   const [pdfReports, setPdfReports] = useState<PdfReportResponse[]>([]); //리포트 목록
-  const [selectedReport, setSelectedReport] =
-    useState<PdfReportResponse | null>(null); //선택된 리포트
   const [petList, setPetList] = useState<PetResponse[]>([]);
   const [selectedPetName, setSelectedPetName] = useState("");
 
@@ -96,7 +94,6 @@ export default function ReservationPage() {
         petType: selectedPet,
         petName: selectedPetName,
         reportAgree: reportAgree ? "true" : "false",
-        reportId: selectedReport?.id || null,
       });
 
       alert("예약이 완료되었습니다.");
@@ -262,8 +259,6 @@ export default function ReservationPage() {
                   }
 
                   setShowReportModal(true);
-                } else {
-                  setSelectedReport(null);
                 }
               }}
             />
@@ -281,8 +276,7 @@ export default function ReservationPage() {
         <ReportModal
           reports={pdfReports}
           onClose={() => setShowReportModal(false)}
-          onSelect={(report) => {
-            setSelectedReport(report);
+          onSelect={() => {
             setShowReportModal(false);
             setReportAgree(true);
           }}

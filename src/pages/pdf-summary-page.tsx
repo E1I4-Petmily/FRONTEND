@@ -4,8 +4,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import calendarIcon from "../assets/mini-calendar.svg";
 import Button from "../components/common/Button";
 import { createPdfSummary } from "../apis/pdf";
+import { usePetListStore } from "../store/petListStore";
 
 export default function PDFSummaryPage() {
+  const { pets } = usePetListStore();
   const now = new Date();
   const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
   const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
@@ -13,6 +15,9 @@ export default function PDFSummaryPage() {
   const [title, setTitle] = useState("");
   const [startDate, setStartDate] = useState<Date>(firstDay);
   const [endDate, setEndDate] = useState<Date>(lastDay);
+  const [selectedPetId, setSelectedPetId] = useState<number | null>(
+    pets.length > 0 ? pets[0].petId : null
+  );
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -33,6 +38,11 @@ export default function PDFSummaryPage() {
       return;
     }
 
+    if (!selectedPetId) {
+      alert("반려동물을 선택해주세요");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -40,6 +50,7 @@ export default function PDFSummaryPage() {
         title,
         startDate: formatDate(startDate),
         endDate: formatDate(endDate),
+        petId: selectedPetId,
       };
 
       console.log("📤 PDF 요약 API 요청:", data);
@@ -57,6 +68,14 @@ export default function PDFSummaryPage() {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="p-4 min-h-screen flex items-center justify-center">
+        <div className="animate-spin w-8 h-8 border-4 border-gray-300 border-t-[#F56E6D] rounded-full"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col min-h-screen relative">
       <div className="p-5 pt-8 pb-32">
@@ -73,6 +92,24 @@ export default function PDFSummaryPage() {
             className="w-full px-4 py-2 font-[PretendardVariable] border-b border-[#D1D1D1] focus:border-gray-700 focus:outline-none transition-colors placeholder-[#ABABAB]"
           />
         </div>
+
+        <div className="mb-4">
+          <label className="block text-[16px] font-[PretendardVariable] font-semibold mb-2">
+            반려동물 선택
+          </label>
+          <select
+            value={selectedPetId ?? undefined}
+            onChange={(e) => setSelectedPetId(Number(e.target.value))}
+            className="w-full border border-[#ABABAB] rounded-lg px-3 py-2"
+          >
+            {pets.map((pet) => (
+              <option key={pet.petId} value={pet.petId}>
+                {pet.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div className="mb-4">
           <label className="block text-[16px] font-[PretendardVariable] font-semibold mb-3">
             생성 기간

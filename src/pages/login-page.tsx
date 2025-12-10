@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "../components/common/Button";
 import Header from "../components/common/Header";
 import { login } from "../apis/user";
+import { getPetList } from "../apis/pet";
 
 export default function LogIn() {
   const navigate = useNavigate();
@@ -26,11 +27,21 @@ export default function LogIn() {
     localStorage.setItem("accessToken", accessToken);
     localStorage.setItem("userRole", userRole);
 
-    //역할별 분기
     if (userRole === "ROLE_USER") {
-      navigate("/calendar"); //일반유저
+      try {
+        const pets = await getPetList(); // 반려동물 목록 조회
+        if (!pets || pets.length === 0) {
+          navigate("/register/welcome"); // 반려동물 없으면 웰컴페이지
+        } else {
+          navigate("/calendar"); // 반려동물 있으면 캘린더
+        }
+      } catch (err) {
+        console.error("반려동물 목록 조회 실패:", err);
+        // 실패 시 캘린더로 이동하거나 에러 처리
+        navigate("/calendar");
+      }
     } else {
-      navigate("/hospital/home"); //병원
+      navigate("/hospital/home"); // 병원 계정
     }
   };
 

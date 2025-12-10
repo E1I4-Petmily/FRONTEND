@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { usePetFormStore } from "../../store/petFormStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RegisterLayout from "../../layouts/register-layout";
 
 const colors = [
@@ -30,6 +30,14 @@ export default function Color() {
     setColor(selectedColor);
     navigate("/register/completion");
   };
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
 
   return (
     <RegisterLayout

@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "../../components/common/Button";
 import { usePetFormStore } from "../../store/petFormStore";
 import { registerPet } from "../../apis/pet";
+import { useEffect } from "react";
 
 const Completion = () => {
   const navigate = useNavigate();
@@ -25,6 +26,14 @@ const Completion = () => {
       alert("등록 실패");
     }
   };
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center h-full gap-6 px-4 text-center mt-10">

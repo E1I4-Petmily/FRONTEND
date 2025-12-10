@@ -11,6 +11,14 @@ export default function Photo() {
   const petPhoto = petInfo.photo;
 
   useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+
+  useEffect(() => {
     if (petPhoto instanceof File) {
       const url = URL.createObjectURL(petPhoto);
       setPreviewUrl(url);
