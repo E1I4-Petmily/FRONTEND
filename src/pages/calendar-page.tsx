@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import CustomCalendar, {
   type CalendarEvent,
 } from "../components/CustomCalendar";
-import { MOCK_PETS, MOCK_LOGS } from "../mocks/mockPets";
 import pencil from "../assets/pencil.svg";
 import Button from "../components/common/Button";
 import weightIcon from "../assets/record-icons/weight.svg";
@@ -11,15 +10,55 @@ import appearanceIcon from "../assets/record-icons/bandage.svg";
 import periodIcon from "../assets/record-icons/poop.svg";
 import { useNavigate } from "react-router-dom";
 import Picker from "react-mobile-picker";
-import { getPetList, type PetResponse } from "../apis/pet";
+import {
+  getDailyRecords,
+  getMonthlyRecords,
+  getPetList,
+  updatePetRecord,
+  type PetRecordResponse,
+  type PetResponse,
+} from "../apis/pet";
+import { usePetListStore } from "../store/petListStore";
+import { useRecordStore } from "../store/recordStore";
 
 export default function CalendarPage() {
-  const today = new Date();
-  const [pets, setPets] = useState<PetResponse[]>([]);
+  const { pets, setPets } = usePetListStore();
   const [loading, setLoading] = useState(true);
+  const today = new Date();
   const navigate = useNavigate();
-  const [selectedDate, setSelectedDate] = useState<Date>(today);
   const [selectedPet, setSelectedPet] = useState<PetResponse | null>(null);
+  const {
+    selectedDate,
+    setSelectedPetId,
+    setSelectedDate,
+    reopenPicker,
+    setReopenPicker,
+  } = useRecordStore();
+  const [selectedDateState, setSelectedDateState] = useState<Date>(
+    selectedDate ? new Date(selectedDate) : today
+  );
+  const [monthlyEvents, setMonthlyEvents] = useState<
+    Record<string, CalendarEvent[]>
+  >({});
+  const [dailyRecords, setDailyRecords] = useState<
+    Record<
+      string,
+      Record<
+        number,
+        {
+          weight: number | null;
+          behavior: string[];
+          appearance: string[];
+          reaction: string[];
+        }
+      >
+    >
+  >({});
+
+  const [currentMonth, setCurrentMonth] = useState({
+    year: today.getFullYear(),
+    month: today.getMonth() + 1,
+  });
   const [showRecordPicker, setShowRecordPicker] = useState(false);
   const [showWeightPicker, setShowWeightPicker] = useState(false);
   const [pickerValue, setPickerValue] = useState({
@@ -31,6 +70,7 @@ export default function CalendarPage() {
     const fetchPets = async () => {
       try {
         const res = await getPetList();
+        console.log("🐶 반려동물 목록 조회:", res);
         setPets(res);
       } catch (err) {
         console.error("반려동물 목록 조회 실패:", err);
@@ -39,7 +79,99 @@ export default function CalendarPage() {
       }
     };
     fetchPets();
-  }, []);
+  }, [setPets]);
+
+  useEffect(() => {
+    if (reopenPicker) {
+      setShowRecordPicker(true);
+      setReopenPicker(false);
+    }
+  }, [reopenPicker]);
+
+  useEffect(() => {
+    const fetchMonthlyData = async () => {
+      setLoading(true);
+      try {
+        const { year, month } = currentMonth;
+        const res = await getMonthlyRecords(year, month);
+
+        // 디버깅용: 데이터 확인
+        console.log("변환 전 API 데이터:", res);
+
+        const newEvents: Record<string, CalendarEvent[]> = {};
+
+        res.forEach((record: PetRecordResponse) => {
+          const dateKey = record.date;
+
+          if (!newEvents[dateKey]) newEvents[dateKey] = [];
+          const uniqueId = record.petName;
+
+          const exists = newEvents[dateKey].find((e) => e.id === uniqueId);
+
+          if (!exists) {
+            newEvents[dateKey].push({
+              id: uniqueId,
+              color: record.petColor,
+              type: "pet",
+              data: record,
+            });
+          }
+        });
+
+        console.log("변환된 캘린더 이벤트:", newEvents); // 확인용 로그
+        setMonthlyEvents(newEvents);
+      } catch (err) {
+        console.error("월별 기록 조회 실패:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // pets 목록이 없어도 기록은 띄울 수 있어야 한다면 pets.length 조건 제거 고려
+    fetchMonthlyData();
+  }, [currentMonth.year, currentMonth.month]);
+
+  useEffect(() => {
+    if (!selectedDate) return;
+
+    const fetchDailyData = async () => {
+      setLoading(true);
+      try {
+        const res = await getDailyRecords(
+          selectedDateState.toLocaleDateString("en-CA")
+        );
+        console.log(selectedDateState.toLocaleDateString("en-CA"));
+        console.log("일별 기록 조회:", res);
+
+        const newDailyRecords: Record<
+          number,
+          {
+            weight: number | null;
+            behavior: string[];
+            appearance: string[];
+            reaction: string[];
+          }
+        > = {};
+        res.pets.forEach((pet) => {
+          newDailyRecords[pet.petId] = {
+            weight: pet.weight,
+            behavior: pet.behavior,
+            appearance: pet.appearance,
+            reaction: pet.reaction,
+          };
+        });
+
+        setDailyRecords(newDailyRecords);
+      } catch (err) {
+        console.error("일별 기록 조회 실패:", err);
+        console.log(selectedDate);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDailyData();
+  }, [selectedDate]);
 
   const numbers = Array.from({ length: 100 }, (_, i) =>
     String(i).padStart(2, "0")
@@ -50,42 +182,10 @@ export default function CalendarPage() {
     decimal: numbers,
   };
 
-  const [petSymptomsByDate] = useState<
-    Record<string, Record<number, string[]>>
-  >({});
-
   const formatDate = (date: Date) => {
     const dayNames = ["일", "월", "화", "수", "목", "금", "토"];
     return `${date.getMonth() + 1}월 ${date.getDate()}일(${dayNames[date.getDay()]})`;
   };
-
-  const handlePetEditClick = (pet: PetResponse) => {
-    setSelectedPet(pet);
-  };
-
-  // 1. 캘린더용 이벤트 데이터 변환
-  const calendarEvents = useMemo(() => {
-    const events: Record<string, CalendarEvent[]> = {};
-
-    MOCK_LOGS.forEach((log) => {
-      const pet = MOCK_PETS.find((p) => p.id === log.petId);
-      if (!pet) return;
-
-      if (!events[log.date]) {
-        events[log.date] = [];
-      }
-      // 중복 방지: 해당 날짜에 해당 펫의 점이 이미 있으면 추가 안 함
-      if (!events[log.date].find((e) => e.id === pet.id)) {
-        events[log.date].push({
-          id: pet.id,
-          color: pet.color,
-          type: "pet",
-          data: log,
-        });
-      }
-    });
-    return events;
-  }, []);
 
   if (loading) {
     return (
@@ -111,9 +211,18 @@ export default function CalendarPage() {
     >
       <CustomCalendar
         type="pet"
-        onDateSelect={(date) => setSelectedDate(date)}
-        selectedDate={selectedDate}
-        events={calendarEvents}
+        onDateSelect={(date) => {
+          const dateString = date.toLocaleDateString("en-CA");
+          setSelectedDateState(date);
+          setSelectedDate(dateString);
+          console.log("선택한 날짜:", dateString);
+        }}
+        selectedDate={selectedDateState}
+        events={monthlyEvents}
+        onMonthChange={(year, month) => {
+          console.log("📅 달 변경됨:", year, month);
+          setCurrentMonth({ year, month });
+        }}
         getDayStyle={({ isToday }) => {
           return isToday ? "text-[#FFFFFF]" : "text-gray-700";
         }}
@@ -131,15 +240,15 @@ export default function CalendarPage() {
       />
 
       {selectedDate && (
-        <div className="mt-6 w-full max-w-md bg-white rounded-xl shadow p-4">
+        <div className="mt-6 w-full max-w-md bg-white rounded-xl p-4">
           <div className="font-[PretendardVariable] font-medium text-[#4C4C4C] text-[16px] mb-4">
-            {formatDate(selectedDate)}
+            {formatDate(selectedDateState)}
           </div>
 
           <div className="flex flex-col gap-3">
             {pets.map((pet) => {
-              const dateKey = selectedDate.toISOString().split("T")[0];
-              const symptoms = petSymptomsByDate[dateKey]?.[pet.petId] || [];
+              const dateKey = selectedDateState.toLocaleDateString("en-CA");
+              const symptoms = dailyRecords[dateKey]?.[pet.petId];
 
               return (
                 <div
@@ -156,27 +265,59 @@ export default function CalendarPage() {
                       {pet.name}
                     </div>
 
-                    {symptoms.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mt-1">
-                        {symptoms.map((s, idx) => (
-                          <span
-                            key={idx}
-                            className="px-2 py-1 text-xs rounded-full bg-gray-100 border text-gray-600 flex items-center gap-1"
-                          >
-                            <span
-                              className="w-2 h-2 rounded-full"
-                              style={{ backgroundColor: pet.colorHex }}
+                    {symptoms && (
+                      <div className="flex flex-col gap-1 mt-1">
+                        {symptoms.weight != null && (
+                          <div className="flex items-center gap-1 text-gray-600">
+                            <img
+                              src={weightIcon}
+                              alt="체중"
+                              className="w-4 h-4"
                             />
-                            {s}
-                          </span>
-                        ))}
+                            {symptoms.weight} kg
+                          </div>
+                        )}
+                        {symptoms.behavior.length > 0 && (
+                          <div className="flex items-center gap-1 text-gray-600">
+                            <img
+                              src={behaviorIcon}
+                              alt="행동/식습관"
+                              className="w-4 h-4"
+                            />
+                            {symptoms.behavior.join(", ")}
+                          </div>
+                        )}
+                        {symptoms.appearance.length > 0 && (
+                          <div className="flex items-center gap-1 text-gray-600">
+                            <img
+                              src={appearanceIcon}
+                              alt="외형이상"
+                              className="w-4 h-4"
+                            />
+                            {symptoms.appearance.join(", ")}
+                          </div>
+                        )}
+                        {symptoms.reaction.length > 0 && (
+                          <div className="flex items-center gap-1 text-gray-600">
+                            <img
+                              src={periodIcon}
+                              alt="생리반응"
+                              className="w-4 h-4"
+                            />
+                            {symptoms.reaction.join(", ")}
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
 
                   <button
                     onClick={() => {
-                      handlePetEditClick(pet);
+                      const dateKey =
+                        selectedDateState.toLocaleDateString("en-CA");
+                      setSelectedPetId(pet.petId);
+                      setSelectedDate(dateKey);
+                      setSelectedPet(pet);
                       setShowRecordPicker(true);
                     }}
                     className="text-gray-500 hover:text-black"
@@ -316,7 +457,25 @@ export default function CalendarPage() {
             <Button
               bgColor="#F56E6D"
               activeColor="#c54f4f"
-              onClick={() => setShowWeightPicker(false)}
+              onClick={async () => {
+                if (!selectedPet?.petId) return;
+                if (!selectedDate) return;
+
+                const weightValue =
+                  Number(pickerValue.kg) + Number(pickerValue.decimal) / 100;
+
+                try {
+                  await updatePetRecord(selectedPet.petId, {
+                    date: selectedDateState.toLocaleDateString("en-CA"),
+                    weight: weightValue,
+                  });
+                  alert("체중이 기록되었습니다!");
+                  setShowWeightPicker(false);
+                } catch (err) {
+                  console.error("체중 기록 실패", err);
+                  alert("체중 기록에 실패했습니다.");
+                }
+              }}
             >
               저장
             </Button>
