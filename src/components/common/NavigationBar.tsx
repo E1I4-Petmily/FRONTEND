@@ -8,20 +8,6 @@ const NavigationBar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  /*
-  // 온보딩 등 특정 페이지에서는 숨김
-  const hideNavPaths = [
-    "/signup",
-    "/login",
-    "/onboarding/welcome",
-    "/onboarding/photo",
-    "/onboarding/information",
-    "/onboarding/color",
-    "/onboarding/completion",
-  ];
-  if (hideNavPaths.includes(location.pathname)) return null;
-  */
-
   const isActive = (pattern: string) =>
     !!matchPath({ path: pattern, end: false }, location.pathname);
 

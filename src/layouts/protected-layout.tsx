@@ -62,7 +62,8 @@ const ProtectedLayout = () => {
         <div className="pt-12">
           <Outlet context={setDynamicTitle} />
           {showNavBar &&
-            (location.pathname === "/hospital/home" ? (
+            (location.pathname === "/hospital/home" ||
+            location.pathname === "hospital/mypage" ? (
               <HospitalNav />
             ) : (
               <NavigationBar />

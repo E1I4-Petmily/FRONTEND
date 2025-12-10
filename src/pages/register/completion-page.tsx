@@ -27,7 +27,7 @@ const Completion = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-full gap-6 px-4 text-center">
+    <div className="flex flex-col items-center justify-center h-full gap-6 px-4 text-center mt-10">
       {petPhoto && (
         <img
           src={petPhoto}
