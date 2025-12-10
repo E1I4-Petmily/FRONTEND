@@ -27,8 +27,6 @@ const genderToCode = (kor: string) => {
       return "MALE";
     case "암컷":
       return "FEMALE";
-    case "중성화":
-      return "NEUTERED";
     default:
       return "UNKNOWN";
   }
