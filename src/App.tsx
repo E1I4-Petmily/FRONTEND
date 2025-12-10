@@ -26,6 +26,7 @@ import PDFSummaryPage from "./pages/pdf-summary-page";
 import HospitalDetailPage from "./pages/hospital-detail-page";
 import HospitalSignUp from "./pages/hospital-signup-page";
 import HospitalHome from "./pages/hospital-home-page";
+import HospitalMypage from "./pages/hospital-my-page";
 
 const publicRoutes: RouteObject[] = [
   {
@@ -66,6 +67,7 @@ const protectedRoutes: RouteObject[] = [
         element: <HospitalDetailPage />,
       },
       { path: "hospital/home", element: <HospitalHome /> },
+      { path: "hospital/mypage", element: <HospitalMypage /> },
     ],
   },
 ];
