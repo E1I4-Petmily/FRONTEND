@@ -24,15 +24,19 @@ import ReactionPage from "./pages/record/reaction-page";
 import ReservationPage from "./pages/reservation-page";
 import PDFSummaryPage from "./pages/pdf-summary-page";
 import HospitalDetailPage from "./pages/hospital-detail-page";
+import HospitalSignUp from "./pages/hospital-signup-page";
+import HospitalHome from "./pages/hospital-home-page";
+import HospitalMypage from "./pages/hospital-my-page";
 
 const publicRoutes: RouteObject[] = [
   {
     path: "/",
     element: <PublicLayout />,
     children: [
-      { path: "landing", element: <Landing /> },
+      { index: true, element: <Landing /> },
       { path: "signup", element: <SignUp /> },
       { path: "login", element: <LogIn /> },
+      { path: "hospitalsignup", element: <HospitalSignUp /> },
     ],
   },
 ];
@@ -59,9 +63,11 @@ const protectedRoutes: RouteObject[] = [
       { path: "hospital", element: <HospitalListPage /> },
       { path: "hospital/reservation", element: <ReservationPage /> },
       {
-        path: "/hospital/:placeId",
+        path: "hospital/:placeId",
         element: <HospitalDetailPage />,
       },
+      { path: "hospital/home", element: <HospitalHome /> },
+      { path: "hospital/mypage", element: <HospitalMypage /> },
     ],
   },
 ];

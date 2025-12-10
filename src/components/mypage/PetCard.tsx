@@ -13,6 +13,7 @@ interface PetCardProps {
   petImageUrl?: string;
   colorHex?: string;
   onAddClick?: () => void;
+  onDelete?: () => void;
 }
 
 function PetCard({
@@ -24,7 +25,14 @@ function PetCard({
   petImageUrl,
   colorHex,
   onAddClick,
+  onDelete,
 }: PetCardProps) {
+  const genderToKorean: Record<string, string> = {
+    MALE: "수컷",
+    FEMALE: "암컷",
+    UNKNOWN: "중성화",
+  };
+
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -64,7 +72,7 @@ function PetCard({
       <button
         onClick={onAddClick}
         style={{ width: "calc(100%)" }}
-        className="h-[190px] rounded-[20px] bg-[#ECECEC] shadow-md flex flex-col items-center justify-center"
+        className="h-[220px] rounded-[20px] bg-[#ECECEC] shadow-md flex flex-col items-center justify-center"
       >
         <div className="w-10 h-10 bg-[#D9D9D9] rounded-full flex items-center justify-center">
           <img src={plus} alt="add" className="w-6 h-6" />
@@ -94,8 +102,8 @@ function PetCard({
         </button>
       </div>
 
-      <div className="flex gap-2 px-3 mt-2">
-        <MiniTag label={gender!} colorHex={colorHex!} />
+      <div className="flex flex-col gap-2 px-3 mt-2">
+        <MiniTag label={genderToKorean[gender!]} colorHex={colorHex!} />
         <MiniTag label={birthDate!} colorHex={colorHex!} />
       </div>
 
@@ -111,7 +119,12 @@ function PetCard({
             수정하기
           </button>
           <div className="w-full h-[1px] bg-[#E7EAED]"></div>
-          <button className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded-b-lg text-sm text-red-500">
+          <button
+            className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded-b-lg text-sm text-red-500"
+            onClick={() => {
+              if (onDelete) onDelete();
+            }}
+          >
             삭제하기
           </button>
         </div>

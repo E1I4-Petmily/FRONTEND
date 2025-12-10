@@ -118,15 +118,33 @@ const CustomCalendar = <T,>({
             <div
               key={i}
               onClick={() => handleSelectDate(day)}
-              className={`py-2 cursor-pointer transition ${styleClass}`}
+              className={`py-2 cursor-pointer transition flex flex-col items-center ${styleClass}`}
             >
-              {day}
-              {/* 일정 점 표시 */}
-              {type === "pet" && renderEventDot && dayEvents.length > 0 && (
-                <div className="mt-1 flex justify-center">
-                  {renderEventDot(dayEvents)}
-                </div>
-              )}
+              {/* 날짜 숫자 + 선택 테두리 */}
+              <div className="relative flex items-center justify-center h-6">
+                {/* 숫자 */}
+
+                {isToday && (
+                  <div className="absolute w-6 h-6 rounded-full bg-[#F56E6D]" />
+                )}
+
+                {/* 숫자 */}
+                <span className={`z-10 ${isToday ? "text-white" : ""}`}>
+                  {day}
+                </span>
+
+                {/* 선택된 날: 테두리 원 */}
+                {isSelected && (
+                  <div className="absolute w-6 h-6 rounded-full border-[1.5px] border-[#F56E6D]"></div>
+                )}
+              </div>
+
+              {/* 이벤트 점 */}
+              <div className="h-3 flex justify-center items-start pt-1">
+                {type === "pet" && renderEventDot && dayEvents.length > 0
+                  ? renderEventDot(dayEvents)
+                  : null}
+              </div>
             </div>
           );
         })}

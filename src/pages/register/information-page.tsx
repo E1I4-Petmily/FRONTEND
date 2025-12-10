@@ -31,7 +31,7 @@ export default function Information() {
 
   const canProceed = useMemo(() => {
     return name.trim().length > 0;
-  }, [name, gender]);
+  }, [name]);
 
   const handleNext = useCallback(() => {
     if (!canProceed) {

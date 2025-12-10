@@ -1,3 +1,5 @@
+import { axiosInstance } from "./axios";
+
 export interface Review {
   rating: number;
   text: string;
@@ -50,8 +52,12 @@ export interface HospitalDetailResponse {
   result: HospitalDetail;
 }
 
-export async function getHospitalDetail(placeId: string) {
-  const res = await fetch(`/api/v1/hospitals/${placeId}`);
-  const data: HospitalDetailResponse = await res.json();
-  return data.result;
+export async function getHospitalDetail(
+  placeId: string
+): Promise<HospitalDetail> {
+  const res = await axiosInstance.get<HospitalDetailResponse>(
+    `/api/v1/hospitals/${placeId}`
+  );
+
+  return res.data.result;
 }

@@ -2,6 +2,7 @@ import { matchPath, Outlet, useLocation } from "react-router-dom";
 import Header from "../components/common/Header";
 import NavigationBar from "../components/common/NavigationBar";
 import { useState } from "react";
+import HospitalNav from "../components/common/HospitalNav";
 
 const ProtectedLayout = () => {
   const location = useLocation();
@@ -9,10 +10,19 @@ const ProtectedLayout = () => {
   const isHospitalDetail = matchPath("/hospital/:placeId", location.pathname);
 
   const showNav = ["/calendar/*", "/mypage/*", "hospital/*"];
+  const hideHeader = ["/hospital"];
+
+  const shouldHideHeader = hideHeader.some((pattern) =>
+    matchPath({ path: pattern, end: true }, location.pathname)
+  );
 
   const showNavBar = showNav.some((pattern) =>
     matchPath({ path: pattern, end: false }, location.pathname)
   );
+
+  const hospitalNavPages = ["/hospital/home", "/hospital/mypage"];
+
+  const isHospitalNavPage = hospitalNavPages.includes(location.pathname);
 
   const isCalendar = !!matchPath("/calendar", location.pathname);
 
@@ -21,6 +31,7 @@ const ProtectedLayout = () => {
     "/mypage",
     "/register/completion",
     "/hospital",
+    "/hospital/mypage",
   ];
   const hasArrow = !hideArrowPages.includes(location.pathname);
 
@@ -33,6 +44,7 @@ const ProtectedLayout = () => {
     "/calendar/reaction": "생리반응",
     "/calendar/summary": "AI 요약 리포트 생성",
     "/hospital/reservation": "예약하기",
+    "/hospital/mypage": "병원 마이페이지",
   };
 
   const title = pageTitles[location.pathname] || "";
@@ -42,18 +54,29 @@ const ProtectedLayout = () => {
   return (
     <div className="flex justify-center min-h-screen">
       <div className="relative w-full max-w-[480px] min-h-screen bg-[#F8F8F8]">
-        <Header
-          type={isCalendar ? "logoOnly" : hasArrow ? "default" : "titleOnly"}
-          title={finalTitle}
-          bgColor={
-            location.pathname === "/hospital/reservation"
-              ? "#FFFFFF"
-              : undefined
-          }
-        />
+        {!shouldHideHeader && (
+          <Header
+            type={
+              location.pathname === "/hospital/home"
+                ? "logoOnlyNoPdf"
+                : isCalendar
+                  ? "logoOnly"
+                  : hasArrow
+                    ? "default"
+                    : "titleOnly"
+            }
+            title={finalTitle}
+            bgColor={
+              location.pathname === "/hospital/reservation"
+                ? "#FFFFFF"
+                : undefined
+            }
+          />
+        )}
         <div className="pt-12">
           <Outlet context={setDynamicTitle} />
-          {showNavBar && <NavigationBar />}
+          {showNavBar &&
+            (isHospitalNavPage ? <HospitalNav /> : <NavigationBar />)}
         </div>
       </div>
     </div>

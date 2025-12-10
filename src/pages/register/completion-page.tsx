@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/common/Button";
 import { usePetFormStore } from "../../store/petFormStore";
+import { registerPet } from "../../apis/pet";
 
 const Completion = () => {
   const navigate = useNavigate();
-  const { petInfo } = usePetFormStore();
+  const { petInfo, resetPetForm } = usePetFormStore();
 
   const petName = petInfo.name || "우리 아이";
   const petPhoto = petInfo.photo
@@ -13,8 +14,20 @@ const Completion = () => {
   const petColor = petInfo.color || "#F56E6D";
   console.log("Onboarding state:", petInfo);
 
+  const handleRegister = async () => {
+    try {
+      await registerPet(petInfo);
+      alert("등록 성공!");
+      resetPetForm();
+      navigate("/calendar");
+    } catch (err) {
+      console.error(err);
+      alert("등록 실패");
+    }
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center h-full gap-6 px-4 text-center">
+    <div className="flex flex-col items-center justify-center h-full gap-6 px-4 text-center mt-10">
       {petPhoto && (
         <img
           src={petPhoto}
@@ -35,7 +48,7 @@ const Completion = () => {
 
       <div className="absolute bottom-10 left-0 w-full px-[10px]">
         <Button
-          onClick={() => navigate("/calendar")}
+          onClick={handleRegister}
           bgColor="#F56E6D"
           activeColor="#c54f4f"
         >
