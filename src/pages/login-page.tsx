@@ -45,6 +45,14 @@ export default function LogIn() {
     }
   };
 
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen relative">
       <Header type="default" title="로그인" />

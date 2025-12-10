@@ -1,9 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import mainlogo from "../assets/petmily-main.png";
 import Button from "../components/common/Button";
+import { useEffect } from "react";
 
 export default function Landing() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
 
   return (
     <div className="p-4 min-h-screen grid grid-rows-[auto_1fr_auto] items-center relative">
