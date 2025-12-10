@@ -50,7 +50,15 @@ const ProtectedLayout = () => {
       <div className="relative w-full max-w-[480px] min-h-screen bg-[#F8F8F8]">
         {!shouldHideHeader && (
           <Header
-            type={isCalendar ? "logoOnly" : hasArrow ? "default" : "titleOnly"}
+            type={
+              location.pathname === "/hospital/home"
+                ? "logoOnlyNoPdf"
+                : isCalendar
+                  ? "logoOnly"
+                  : hasArrow
+                    ? "default"
+                    : "titleOnly"
+            }
             title={finalTitle}
             bgColor={
               location.pathname === "/hospital/reservation"

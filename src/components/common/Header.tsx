@@ -4,7 +4,12 @@ import PetmilyLogo from "../../assets/petmily-logo.png";
 import PetmilyLogo2 from "../../assets/petmily-logo2.svg";
 import Lightening from "../../assets/lightning.svg";
 
-type HeaderType = "default" | "arrowOnly" | "titleOnly" | "logoOnly";
+type HeaderType =
+  | "default"
+  | "arrowOnly"
+  | "titleOnly"
+  | "logoOnly"
+  | "logoOnlyNoPdf";
 
 interface HeaderProps {
   type: HeaderType;
@@ -68,6 +73,16 @@ const Header = ({ type, title, bgColor }: HeaderProps) => {
               className="w-6 h-6 cursor-pointer"
               onClick={handleSummary}
             />
+          </div>
+        );
+
+      case "logoOnlyNoPdf":
+        return (
+          <div className="flex justify-start items-center px-6 w-full">
+            <div className="flex items-center gap-1">
+              <img src={PetmilyLogo} alt="펫밀리 로고" className="w-6 h-6" />
+              <img src={PetmilyLogo2} alt="펫밀리 문구" className="w-18 h-6" />
+            </div>
           </div>
         );
 
