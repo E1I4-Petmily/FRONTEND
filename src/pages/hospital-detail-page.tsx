@@ -137,7 +137,11 @@ export default function HospitalDetailPage() {
         <Button
           onClick={() => {
             if (!data.registered) return;
-            navigate("/hospital/reservation");
+            navigate("/hospital/reservation", {
+              state: {
+                hospitalProfileId: data.hospitalAccountId,
+              },
+            });
           }}
           bgColor="#F56E6D"
           activeColor="#c54f4f"
