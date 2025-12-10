@@ -191,7 +191,7 @@ function PetEditPage() {
         </div>
       </main>
 
-      <div className="fixed bottom-6 left-0 w-full px-6">
+      <div className="fixed bottom-0 py-5 left-1/2 -translate-x-1/2 w-full max-w-[480px] px-3 z-50">
         <Button onClick={handleSubmit} bgColor="#F56E6D" activeColor="#c54f4f">
           수정완료
         </Button>

@@ -1,7 +1,20 @@
+import { useNavigate } from "react-router-dom";
+
 export default function HospitalMypage() {
+  const navigate = useNavigate();
   return (
-    <div className="px-6 pb-24 mt-4 font-[PretendardVariable]">
-      병원 마이페이지
+    <div>
+      <div className="w-full flex justify-center mt-10 mb-3">
+        <button
+          onClick={() => {
+            localStorage.removeItem("accessToken");
+            navigate("/");
+          }}
+          className="text-red-500 text-sm font-medium"
+        >
+          로그아웃
+        </button>
+      </div>
     </div>
   );
 }

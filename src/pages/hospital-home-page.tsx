@@ -3,10 +3,10 @@ import CustomCalendar, {
   type CalendarEvent,
 } from "../components/CustomCalendar";
 import {
-  //  getReservationsByDate,
+  getReservationsByDate,
   type ReservationResponse,
 } from "../apis/hospital-reservation";
-import { MOCK_RESERVATIONS } from "../mocks/mockReservations";
+/* import { MOCK_RESERVATIONS } from "../mocks/mockReservations"; */
 import file from "../assets/file.png";
 
 export default function HospitalHome() {
@@ -16,26 +16,23 @@ export default function HospitalHome() {
 
   const calendarEvents: Record<string, CalendarEvent[]> = {};
 
-  // const formatDate = (date: Date) => {
-  //   return date.toISOString().split("T")[0];
-  // };
+  const formatDate = (date: Date) => {
+    return date.toISOString().split("T")[0];
+  };
 
-  // useEffect(() => {
-  //   const fetchReservations = async () => {
-  //     try {
-  //       const dateStr = formatDate(selectedDate);
-  //       const data = await getReservationsByDate(dateStr);
-  //       setReservations(data);
-  //     } catch (e) {
-  //       console.error("예약 목록 불러오기 실패:", e);
-  //     }
-  //   };
-
-  //   fetchReservations();
-  // }, [selectedDate]);
-
+  // 날짜 선택 시 예약 데이터 불러오기
   useEffect(() => {
-    setReservations(MOCK_RESERVATIONS);
+    const fetchData = async () => {
+      try {
+        const dateString = formatDate(selectedDate);
+        const data = await getReservationsByDate(dateString);
+        setReservations(data);
+      } catch (e) {
+        console.error("예약 조회 실패:", e);
+      }
+    };
+
+    fetchData();
   }, [selectedDate]);
 
   const displayDate = `${selectedDate.getMonth() + 1}월 ${selectedDate.getDate()}일`;
@@ -55,7 +52,7 @@ export default function HospitalHome() {
       }}
     >
       <div className="mb-3 mt-2 font-[PretendardVariable]">
-        <div className="text-[14px] text-[#000000]">안녕하세요, 님!</div>
+        <div className="text-[14px] text-[#000000]">안녕하세요!</div>
         <div className="text-[14px] text-[#000000]">
           오늘은 <span className="text-[#F56E6D]">{reservations.length}</span>
           개의 진료 예약이 잡혀 있습니다.
@@ -104,8 +101,14 @@ export default function HospitalHome() {
                     <div>{r.petName}</div>
                   </div>
 
-                  {/* 오른쪽 파일 아이콘 */}
-                  <div className="w-8 h-8 bg-white rounded-md flex items-center justify-center shadow-sm ml-auto">
+                  {/* 오른쪽 파일 아이콘 pdf 나오면 연결하기 */}
+                  <div
+                    className="w-8 h-8 bg-white rounded-md flex items-center justify-center shadow-sm ml-auto"
+                    onClick={() => {
+                      // r.pdfUrl 추가되면 아래 코드 사용
+                      // window.open(r.pdfUrl, "_blank");
+                    }}
+                  >
                     <img src={file} alt="파일 아이콘" className="w-5 h-5" />
                   </div>
                 </li>

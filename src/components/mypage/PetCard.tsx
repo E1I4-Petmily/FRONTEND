@@ -13,6 +13,7 @@ interface PetCardProps {
   petImageUrl?: string;
   colorHex?: string;
   onAddClick?: () => void;
+  onDelete?: () => void;
 }
 
 function PetCard({
@@ -24,6 +25,7 @@ function PetCard({
   petImageUrl,
   colorHex,
   onAddClick,
+  onDelete,
 }: PetCardProps) {
   const genderToKorean: Record<string, string> = {
     MALE: "수컷",
@@ -117,7 +119,12 @@ function PetCard({
             수정하기
           </button>
           <div className="w-full h-[1px] bg-[#E7EAED]"></div>
-          <button className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded-b-lg text-sm text-red-500">
+          <button
+            className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded-b-lg text-sm text-red-500"
+            onClick={() => {
+              if (onDelete) onDelete();
+            }}
+          >
             삭제하기
           </button>
         </div>

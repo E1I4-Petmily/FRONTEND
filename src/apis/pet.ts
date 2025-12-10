@@ -51,3 +51,8 @@ export async function registerPet(petInfo: PetForm) {
     },
   });
 }
+
+//반려동물 삭제 API
+export async function deletePet(petId: number) {
+  return axiosInstance.delete(`/api/v1/pets/${petId}`);
+}

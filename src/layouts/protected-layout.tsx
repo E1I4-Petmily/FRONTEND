@@ -20,6 +20,10 @@ const ProtectedLayout = () => {
     matchPath({ path: pattern, end: false }, location.pathname)
   );
 
+  const hospitalNavPages = ["/hospital/home", "/hospital/mypage"];
+
+  const isHospitalNavPage = hospitalNavPages.includes(location.pathname);
+
   const isCalendar = !!matchPath("/calendar", location.pathname);
 
   const hideArrowPages = [
@@ -27,6 +31,7 @@ const ProtectedLayout = () => {
     "/mypage",
     "/register/completion",
     "/hospital",
+    "/hospital/mypage",
   ];
   const hasArrow = !hideArrowPages.includes(location.pathname);
 
@@ -39,6 +44,7 @@ const ProtectedLayout = () => {
     "/calendar/reaction": "생리반응",
     "/calendar/summary": "AI 요약 리포트 생성",
     "/hospital/reservation": "예약하기",
+    "/hospital/mypage": "병원 마이페이지",
   };
 
   const title = pageTitles[location.pathname] || "";
@@ -50,7 +56,15 @@ const ProtectedLayout = () => {
       <div className="relative w-full max-w-[480px] min-h-screen bg-[#F8F8F8]">
         {!shouldHideHeader && (
           <Header
-            type={isCalendar ? "logoOnly" : hasArrow ? "default" : "titleOnly"}
+            type={
+              location.pathname === "/hospital/home"
+                ? "logoOnlyNoPdf"
+                : isCalendar
+                  ? "logoOnly"
+                  : hasArrow
+                    ? "default"
+                    : "titleOnly"
+            }
             title={finalTitle}
             bgColor={
               location.pathname === "/hospital/reservation"
@@ -62,12 +76,7 @@ const ProtectedLayout = () => {
         <div className="pt-12">
           <Outlet context={setDynamicTitle} />
           {showNavBar &&
-            (location.pathname === "/hospital/home" ||
-            location.pathname === "hospital/mypage" ? (
-              <HospitalNav />
-            ) : (
-              <NavigationBar />
-            ))}
+            (isHospitalNavPage ? <HospitalNav /> : <NavigationBar />)}
         </div>
       </div>
     </div>
