@@ -4,6 +4,7 @@ export interface PdfSummaryRequest {
   title: string;
   startDate: string;
   endDate: string;
+  petId: number;
 }
 
 export const createPdfSummary = async (data: PdfSummaryRequest) => {
