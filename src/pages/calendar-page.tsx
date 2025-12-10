@@ -260,50 +260,58 @@ export default function CalendarPage() {
 
       {showWeightPicker && (
         <div className="fixed inset-0 bg-black/30 flex items-end justify-center z-50">
-          <div className="w-full bg-white pb-6 px-[10px] rounded-t-lg shadow-lg">
-            <Picker
-              value={pickerValue}
-              onChange={setPickerValue}
-              wheelMode="natural"
-            >
-              <Picker.Column name="kg">
-                {weightSelections.kg.map((kg) => (
-                  <Picker.Item key={kg} value={kg}>
-                    {({ selected }) => (
-                      <div
-                        style={{
-                          padding: "8px 0",
-                          color: selected ? "black" : "#999",
-                          fontWeight: selected ? 600 : 400,
-                          fontSize: 18,
-                        }}
-                      >
-                        {kg}
-                      </div>
-                    )}
-                  </Picker.Item>
-                ))}
-              </Picker.Column>
+          <div className="w-full max-w-[480px] mx-auto bg-white pb-6 px-[10px] rounded-t-lg shadow-lg">
+            <div className="relative flex justify-center items-center py-4">
+              <Picker
+                value={pickerValue}
+                onChange={setPickerValue}
+                wheelMode="natural"
+              >
+                <Picker.Column name="kg">
+                  {weightSelections.kg.map((kg) => (
+                    <Picker.Item key={kg} value={kg}>
+                      {({ selected }) => (
+                        <div
+                          style={{
+                            padding: "8px 60px",
+                            color: selected ? "black" : "#999",
+                            fontWeight: selected ? 600 : 400,
+                            fontSize: 18,
+                          }}
+                        >
+                          {kg}
+                        </div>
+                      )}
+                    </Picker.Item>
+                  ))}
+                </Picker.Column>
 
-              <Picker.Column name="decimal">
-                {weightSelections.decimal.map((d) => (
-                  <Picker.Item key={d} value={d}>
-                    {({ selected }) => (
-                      <div
-                        style={{
-                          padding: "8px 0",
-                          color: selected ? "black" : "#999",
-                          fontWeight: selected ? 600 : 400,
-                          fontSize: 18,
-                        }}
-                      >
-                        {d}
-                      </div>
-                    )}
-                  </Picker.Item>
-                ))}
-              </Picker.Column>
-            </Picker>
+                <Picker.Column name="decimal">
+                  {weightSelections.decimal.map((d) => (
+                    <Picker.Item key={d} value={d}>
+                      {({ selected }) => (
+                        <div
+                          style={{
+                            padding: "8px 60px",
+                            color: selected ? "black" : "#999",
+                            fontWeight: selected ? 600 : 400,
+                            fontSize: 18,
+                          }}
+                        >
+                          {d}
+                        </div>
+                      )}
+                    </Picker.Item>
+                  ))}
+                </Picker.Column>
+              </Picker>
+              <span className="absolute text-[20px] font-semibold -translate-x-1">
+                .
+              </span>
+              <span className="absolute right-5 text-[18px] font-semibold">
+                kg
+              </span>
+            </div>
 
             <Button
               bgColor="#F56E6D"
