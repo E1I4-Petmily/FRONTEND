@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-
-interface ReportItem {
-  id: number;
-  title: string;
-  pdfUrl: string;
-}
+import { getPdfReports, type PdfReportResponse } from "../apis/pdf";
 
 export default function ReportListPage() {
   const location = useLocation();
@@ -13,22 +8,26 @@ export default function ReportListPage() {
 
   console.log("받아온 petId:", petId);
 
-  const [reports, setReports] = useState<ReportItem[]>([]);
+  const [reports, setReports] = useState<PdfReportResponse[]>([]);
 
-  //예시 데이터
   useEffect(() => {
     if (!petId) return;
 
-    if (petId === 1) {
-      setReports([
-        { id: 1, title: "식빵 1", pdfUrl: "/test1.pdf" },
-        { id: 2, title: "식빵 2", pdfUrl: "/test2.pdf" },
-      ]);
+    async function fetchReports() {
+      try {
+        //전체 리포트 목록 조회
+        const allReports = await getPdfReports();
+
+        //petId로 필터링
+        const filtered = allReports.filter((report) => report.petId === petId);
+
+        setReports(filtered);
+      } catch (error) {
+        console.error("리포트 목록 조회 실패:", error);
+      }
     }
 
-    if (petId === 2) {
-      setReports([{ id: 10, title: "쿠키 1", pdfUrl: "/test10.pdf" }]);
-    }
+    fetchReports();
   }, [petId]);
 
   return (
