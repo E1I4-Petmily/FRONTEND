@@ -25,7 +25,6 @@ export interface CreateReservationRequest {
   petType: string;
   petName: string;
   reportAgree: string;
-  reportId?: number | null; //첨부 리포트 선택 시 포함
 }
 
 // 예약 생성 API
