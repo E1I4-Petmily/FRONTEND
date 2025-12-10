@@ -3,7 +3,7 @@ import pencil from "../assets/pencil.svg";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getUserInfo } from "../apis/user";
-import { getPetList } from "../apis/pet";
+import { getPetList, deletePet } from "../apis/pet";
 import type { UserInfoResponse } from "../apis/user";
 import type { PetResponse } from "../apis/pet";
 import { getProfileIcon } from "../utils/profileIcon";
@@ -36,6 +36,22 @@ export default function MyPage() {
 
     fetchData();
   }, []);
+
+  const handleDeletePet = async (petId: number) => {
+    const confirmDelete = window.confirm(
+      "정말 삭제하시겠어요?\n삭제된 정보는 되돌릴 수 없어요."
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      await deletePet(petId);
+
+      setPetList((prev) => prev.filter((pet) => pet.petId !== petId));
+    } catch (err) {
+      console.error("반려동물 삭제 실패", err);
+    }
+  };
 
   return (
     <div className="px-6 pb-24 mt-4 font-[PretendardVariable]">
@@ -89,6 +105,7 @@ export default function MyPage() {
             birthDate={pet.birthDate}
             petImageUrl={pet.petImageUrl}
             colorHex="#00c8b3"
+            onDelete={() => handleDeletePet(pet.petId)}
           />
         ))}
         <PetCard type="add" onAddClick={() => navigate("/register/welcome")} />
