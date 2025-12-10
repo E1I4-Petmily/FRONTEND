@@ -104,7 +104,7 @@ export default function MyPage() {
             gender={pet.gender}
             birthDate={pet.birthDate}
             petImageUrl={pet.petImageUrl}
-            colorHex="#00c8b3"
+            colorHex={pet.colorHex}
             onDelete={() => handleDeletePet(pet.petId)}
           />
         ))}
