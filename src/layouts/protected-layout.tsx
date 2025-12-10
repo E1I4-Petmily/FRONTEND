@@ -31,6 +31,7 @@ const ProtectedLayout = () => {
     "/mypage",
     "/register/completion",
     "/hospital",
+    "/hospital/mypage",
   ];
   const hasArrow = !hideArrowPages.includes(location.pathname);
 
