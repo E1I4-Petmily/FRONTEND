@@ -11,7 +11,15 @@ export async function signup(signupData: SignupRequest) {
   return response.data;
 }
 
-export async function login(loginData: LoginRequest): Promise<string | null> {
+export interface LoginResponse {
+  accessToken: string;
+  username: string;
+  userRole: string;
+}
+
+export async function login(
+  loginData: LoginRequest
+): Promise<LoginResponse | null> {
   const { username, password } = loginData;
 
   const params = new URLSearchParams();
@@ -30,15 +38,17 @@ export async function login(loginData: LoginRequest): Promise<string | null> {
     );
 
     console.log("📩 응답 데이터:", response.data);
+    //응답 객체로 저장
+    const loginResponse = response.data;
 
-    const accessToken = response.data?.accessToken ?? null;
+    /* const accessToken = response.data?.accessToken ?? null; */
 
-    console.log("📩 AccessToken 값: ", accessToken);
+    console.log("📩 AccessToken 값: ", loginResponse.accessToken);
 
-    if (accessToken) {
-      localStorage.setItem("accessToken", accessToken);
+    if (loginResponse.accessToken) {
+      localStorage.setItem("accessToken", loginResponse.accessToken);
     }
-    return accessToken;
+    return loginResponse; //전체 객체 반환
   } catch (err) {
     if (axios.isAxiosError(err)) {
       console.error("로그인 실패:", err.response?.status, err.response?.data);
