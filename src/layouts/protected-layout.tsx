@@ -43,6 +43,7 @@ const ProtectedLayout = () => {
     "/calendar/reaction": "생리반응",
     "/calendar/summary": "AI 요약 리포트 생성",
     "/hospital/reservation": "예약하기",
+    "/hospital/mypage": "병원 마이페이지",
   };
 
   const title = pageTitles[location.pathname] || "";
