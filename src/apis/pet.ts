@@ -11,6 +11,34 @@ export interface PetResponse {
   petImageUrl: string;
 }
 
+export interface RecordUpdateRequest {
+  date: string;
+  weight?: number | null;
+  memo?: string | null;
+  behavior?: string[];
+  appearance?: string[];
+  reaction?: string[];
+}
+
+export interface PetRecordResponse {
+  date: string;
+  petName: string;
+  petColor: string;
+}
+
+export interface DailyPetRecordResponse {
+  date: string;
+  pets: {
+    petId: number;
+    name: string;
+    color: string;
+    weight: number | null;
+    behavior: string[];
+    appearance: string[];
+    reaction: string[];
+  }[];
+}
+
 export async function getPetList() {
   const res = await axiosInstance.get<PetResponse[]>("/api/v1/pets");
   return res.data;
@@ -56,3 +84,28 @@ export async function registerPet(petInfo: PetForm) {
 export async function deletePet(petId: number) {
   return axiosInstance.delete(`/api/v1/pets/${petId}`);
 }
+
+export const updatePetRecord = async (
+  petId: number,
+  data: RecordUpdateRequest
+) => {
+  const res = await axiosInstance.post(`/api/v1/pets/${petId}/entries`, data);
+  return res.data;
+};
+
+export async function getMonthlyRecords(year: number, month: number) {
+  const res = await axiosInstance.get(`/api/v1/entries`, {
+    params: { year, month },
+  });
+  console.log("📅 [API] 월별 기록 조회:", res.data);
+  return res.data as PetRecordResponse[];
+}
+
+export const getDailyRecords = async (
+  date: string
+): Promise<DailyPetRecordResponse> => {
+  const res = await axiosInstance.get("/api/v1/entries/detail", {
+    params: { date },
+  });
+  return res.data;
+};

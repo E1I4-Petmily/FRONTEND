@@ -3,9 +3,18 @@ import bird from "../../assets/register-welcome/yellow-bird.png";
 import cat from "../../assets/register-welcome/gray-cat.png";
 import dog from "../../assets//register-welcome/brown-dog.png";
 import RegisterLayout from "../../layouts/register-layout";
+import { useEffect } from "react";
 
 export default function Welcome() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
 
   return (
     <RegisterLayout
@@ -16,7 +25,7 @@ export default function Welcome() {
           기록해요
         </>
       }
-      subtitle="이름과 기본정보를 등록해 맞춤형 서비스를 시작해요"
+      subtitle="이름과 기본정보를 등록해주세요"
       onNext={() => navigate("/register/photo")}
       buttonContext="다음"
     >

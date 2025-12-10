@@ -22,6 +22,8 @@ export interface CustomCalendarProps<T = unknown> {
   // 선택된 날짜를 부모로 전달
   onDateSelect?: (date: Date) => void;
 
+  onMonthChange?: (year: number, month: number) => void;
+
   // 날짜 스타일링
   getDayStyle?: (params: {
     date: Date;
@@ -39,6 +41,7 @@ const CustomCalendar = <T,>({
   type,
   events = {},
   onDateSelect,
+  onMonthChange,
   selectedDate,
   getDayStyle,
   renderEventDot,
@@ -58,8 +61,17 @@ const CustomCalendar = <T,>({
   for (let i = 0; i < firstDayWeek; i++) daysArray.push(null);
   for (let d = 1; d <= lastDayOfMonth; d++) daysArray.push(d);
 
-  const prevMonth = () => setCurrentDate(new Date(year, month - 1, 1));
-  const nextMonth = () => setCurrentDate(new Date(year, month + 1, 1));
+  const prevMonth = () => {
+    const newDate = new Date(year, month - 1, 1);
+    setCurrentDate(newDate);
+    onMonthChange?.(newDate.getFullYear(), newDate.getMonth() + 1);
+  };
+
+  const nextMonth = () => {
+    const newDate = new Date(year, month + 1, 1);
+    setCurrentDate(newDate);
+    onMonthChange?.(newDate.getFullYear(), newDate.getMonth() + 1);
+  };
 
   const weekDays = ["S", "M", "T", "W", "T", "F", "S"];
 
@@ -102,7 +114,7 @@ const CustomCalendar = <T,>({
           if (!day) return <div key={i}></div>;
 
           const dateObj = new Date(year, month, day);
-          const key = dateObj.toISOString().split("T")[0];
+          const key = dateObj.toLocaleDateString("en-CA");
           const isToday = dateObj.toDateString() === today.toDateString();
           const isSelected =
             selectedDate &&

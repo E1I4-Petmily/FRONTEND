@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import RegisterLayout from "../../layouts/register-layout";
 import type { PetForm } from "../../types/pet";
 import { useNavigate } from "react-router-dom";
@@ -54,6 +54,14 @@ export default function Information() {
     navigate,
     canProceed,
   ]);
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
 
   return (
     <RegisterLayout
