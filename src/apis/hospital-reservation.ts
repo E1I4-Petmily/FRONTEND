@@ -5,6 +5,7 @@ export interface ReservationResponse {
   guardianName: string;
   petName: string;
   petType: string;
+  reportPdfUrl: string;
 }
 
 export const getReservationsByDate = async (date: string) => {

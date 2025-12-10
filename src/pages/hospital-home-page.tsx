@@ -6,7 +6,6 @@ import {
   getReservationsByDate,
   type ReservationResponse,
 } from "../apis/hospital-reservation";
-/* import { MOCK_RESERVATIONS } from "../mocks/mockReservations"; */
 import file from "../assets/file.png";
 
 export default function HospitalHome() {
@@ -105,8 +104,7 @@ export default function HospitalHome() {
                   <div
                     className="w-8 h-8 bg-white rounded-md flex items-center justify-center shadow-sm ml-auto"
                     onClick={() => {
-                      // r.pdfUrl 추가되면 아래 코드 사용
-                      // window.open(r.pdfUrl, "_blank");
+                      window.open(r.reportPdfUrl, "_blank");
                     }}
                   >
                     <img src={file} alt="파일 아이콘" className="w-5 h-5" />
