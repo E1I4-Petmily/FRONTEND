@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RecordLayout from "../../layouts/record-layout";
 import { useRecordStore } from "../../store/recordStore";
 import { updatePetRecord } from "../../apis/pet";
@@ -50,6 +50,14 @@ export default function ReactionPage() {
 
     navigate("/calendar");
   };
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
 
   return (
     <RecordLayout

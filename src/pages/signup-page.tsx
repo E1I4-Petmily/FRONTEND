@@ -53,6 +53,14 @@ export default function SignUp() {
     }
   };
 
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+
   return (
     <div>
       <div className="flex flex-col min-h-screen relative">
