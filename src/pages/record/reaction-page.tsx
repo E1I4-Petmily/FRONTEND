@@ -37,12 +37,12 @@ export default function ReactionPage() {
       // 2) API 호출
       await updatePetRecord(selectedPetId, {
         date: selectedDate, // "YYYY-MM-DD"
-        behavior: reactionList,
+        reaction: reactionList,
       });
 
-      alert("외형 기록이 저장되었습니다!");
+      alert("생리 반응 기록이 저장되었습니다!");
     } catch (error) {
-      console.error("외형 기록 저장 실패:", error);
+      console.error("생리 반응 저장 실패:", error);
       alert("기록 저장에 실패했습니다.");
     }
 
