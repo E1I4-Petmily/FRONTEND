@@ -10,12 +10,12 @@ import profile9 from "../assets/profile-icons/pig.png";
 
 export const PROFILE_IMAGES: Record<number, string> = {
   1: profile1,
-  2: profile2,
-  3: profile3,
-  4: profile4,
-  5: profile5,
+  2: profile4,
+  3: profile8,
+  4: profile7,
+  5: profile9,
   6: profile6,
-  7: profile7,
-  8: profile8,
-  9: profile9,
+  7: profile2,
+  8: profile3,
+  9: profile5,
 };
