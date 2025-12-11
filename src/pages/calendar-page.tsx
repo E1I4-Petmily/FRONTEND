@@ -23,8 +23,6 @@ import { useRecordStore } from "../store/recordStore";
 
 export default function CalendarPage() {
   const { pets, setPets } = usePetListStore();
-  const [loading, setLoading] = useState(true);
-  const today = new Date();
   const navigate = useNavigate();
   const [selectedPet, setSelectedPet] = useState<PetResponse | null>(null);
   const {
@@ -34,9 +32,8 @@ export default function CalendarPage() {
     reopenPicker,
     setReopenPicker,
   } = useRecordStore();
-  const [selectedDateState, setSelectedDateState] = useState<Date>(
-    selectedDate ? new Date(selectedDate) : today
-  );
+  const initialDate = selectedDate ? new Date(selectedDate) : new Date();
+  const [selectedDateState, setSelectedDateState] = useState<Date>(initialDate);
   const [monthlyEvents, setMonthlyEvents] = useState<
     Record<string, CalendarEvent[]>
   >({});
@@ -56,8 +53,8 @@ export default function CalendarPage() {
   >({});
 
   const [currentMonth, setCurrentMonth] = useState({
-    year: today.getFullYear(),
-    month: today.getMonth() + 1,
+    year: initialDate.getFullYear(),
+    month: initialDate.getMonth() + 1,
   });
   const [showRecordPicker, setShowRecordPicker] = useState(false);
   const [showWeightPicker, setShowWeightPicker] = useState(false);
@@ -67,6 +64,12 @@ export default function CalendarPage() {
   });
 
   useEffect(() => {
+    if (selectedDate) {
+      setSelectedDateState(new Date(selectedDate));
+    }
+  }, [selectedDate]);
+
+  useEffect(() => {
     const fetchPets = async () => {
       try {
         const res = await getPetList();
@@ -74,8 +77,6 @@ export default function CalendarPage() {
         setPets(res);
       } catch (err) {
         console.error("반려동물 목록 조회 실패:", err);
-      } finally {
-        setLoading(false);
       }
     };
     fetchPets();
@@ -90,7 +91,6 @@ export default function CalendarPage() {
 
   useEffect(() => {
     const fetchMonthlyData = async () => {
-      setLoading(true);
       try {
         const { year, month } = currentMonth;
         const res = await getMonthlyRecords(year, month);
@@ -122,8 +122,6 @@ export default function CalendarPage() {
         setMonthlyEvents(newEvents);
       } catch (err) {
         console.error("월별 기록 조회 실패:", err);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -135,11 +133,9 @@ export default function CalendarPage() {
     if (!selectedDate) return;
 
     const fetchDailyData = async () => {
-      setLoading(true);
       try {
-        const res = await getDailyRecords(
-          selectedDateState.toLocaleDateString("en-CA")
-        );
+        const dateKey = selectedDateState.toLocaleDateString("en-CA");
+        const res = await getDailyRecords(dateKey);
         console.log(selectedDateState.toLocaleDateString("en-CA"));
         console.log("일별 기록 조회:", res);
 
@@ -161,17 +157,18 @@ export default function CalendarPage() {
           };
         });
 
-        setDailyRecords(newDailyRecords);
+        setDailyRecords((prev) => ({
+          ...prev,
+          [dateKey]: newDailyRecords,
+        }));
       } catch (err) {
         console.error("일별 기록 조회 실패:", err);
         console.log(selectedDate);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchDailyData();
-  }, [selectedDate]);
+  }, [selectedDateState]);
 
   const numbers = Array.from({ length: 100 }, (_, i) =>
     String(i).padStart(2, "0")
@@ -187,17 +184,9 @@ export default function CalendarPage() {
     return `${date.getMonth() + 1}월 ${date.getDate()}일(${dayNames[date.getDay()]})`;
   };
 
-  if (loading) {
-    return (
-      <div className="p-4 min-h-screen flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-4 border-gray-300 border-t-[#F56E6D] rounded-full"></div>
-      </div>
-    );
-  }
-
   return (
     <div
-      className="p-4 min-h-screen"
+      className="p-4 pb-24 min-h-screen"
       style={{
         background: `
           linear-gradient(
@@ -241,99 +230,158 @@ export default function CalendarPage() {
 
       {selectedDate && (
         <div className="mt-6 w-full max-w-md bg-white rounded-xl p-4">
-          <div className="font-[PretendardVariable] font-medium text-[#4C4C4C] text-[16px] mb-4">
+          <div className="font-[PretendardVariable] font-medium text-[#4C4C4C] text-[16px] mb-4 ml-1 mt-1">
             {formatDate(selectedDateState)}
           </div>
 
           <div className="flex flex-col gap-3">
             {pets.map((pet) => {
               const dateKey = selectedDateState.toLocaleDateString("en-CA");
-              const symptoms = dailyRecords[dateKey]?.[pet.petId];
+              const record = dailyRecords[dateKey]?.[pet.petId];
+
+              const hasRecord =
+                record &&
+                (record.weight !== null ||
+                  record.behavior.length > 0 ||
+                  record.appearance.length > 0 ||
+                  record.reaction.length > 0);
 
               return (
-                <div
-                  key={pet.petId}
-                  className="flex items-start gap-3 rounded-lg"
-                >
-                  <div
-                    className="w-2 h-6.5 rounded-md"
-                    style={{ backgroundColor: pet.colorHex }}
-                  />
+                <div key={pet.petId} className="flex gap-2">
+                  <div className="flex flex-col items-center gap-2 pt-1"></div>
 
                   <div className="flex-1">
-                    <div className="font-[PretendardVariable] font-medium text-[18px] text-[#2C2C2C]">
-                      {pet.name}
+                    <div className="flex justify-between items-center mb-2">
+                      <div className="flex items-center gap-2">
+                        <div
+                          className="w-1.5 h-7 rounded-full"
+                          style={{ backgroundColor: pet.colorHex }}
+                        />
+                        <span className="font-[PretendardVariable] font-medium text-[18px] text-[#2C2C2C]">
+                          {pet.name}
+                        </span>
+                      </div>
+
+                      <button
+                        onClick={() => {
+                          const dateKey =
+                            selectedDateState.toLocaleDateString("en-CA");
+                          setSelectedPetId(pet.petId);
+                          setSelectedDate(dateKey);
+                          setSelectedPet(pet);
+                          setShowRecordPicker(true);
+                        }}
+                        className="text-gray-400 hover:text-gray-600 transition-colors"
+                      >
+                        <img
+                          src={pencil}
+                          alt="기록 수정"
+                          className="w-6 h-6 mr-2"
+                        />
+                      </button>
                     </div>
 
-                    {symptoms && (
-                      <div className="flex flex-col gap-1 mt-1">
-                        {symptoms.weight != null && (
-                          <div className="flex items-center gap-1 text-gray-600">
-                            <img
-                              src={weightIcon}
-                              alt="체중"
-                              className="w-4 h-4"
-                            />
-                            {symptoms.weight} kg
+                    {/* 하단: 기록 내용 표시 영역 */}
+                    {record ? (
+                      <div className="flex flex-col gap-3">
+                        {/* 1. 체중 */}
+                        {record.weight !== null && (
+                          <div className="flex flex-col gap-1">
+                            <div className="flex items-center gap-1.5">
+                              {/* 반려동물 색깔 동그라미 */}
+                              <div
+                                className="w-2 h-2 rounded-full"
+                                style={{ backgroundColor: pet.colorHex }}
+                              />
+                              <span className="text-xs font-medium text-gray-500">
+                                체중
+                              </span>
+                            </div>
+                            <div className="text-[15px] text-[#4C4C4C] pl-4">
+                              {record.weight} kg
+                            </div>
                           </div>
                         )}
-                        {symptoms.behavior.length > 0 && (
-                          <div className="flex items-center gap-1 text-gray-600">
-                            <img
-                              src={behaviorIcon}
-                              alt="행동/식습관"
-                              className="w-4 h-4"
-                            />
-                            {symptoms.behavior.join(", ")}
+
+                        {/* 2. 행동/식습관 */}
+                        {record.behavior && record.behavior.length > 0 && (
+                          <div className="flex flex-col gap-1">
+                            <div className="flex items-center gap-1.5">
+                              <div
+                                className="w-2 h-2 rounded-full"
+                                style={{ backgroundColor: pet.colorHex }}
+                              />
+                              <span className="text-xs font-medium text-gray-500">
+                                행동/식습관
+                              </span>
+                            </div>
+                            <div className="text-[15px] text-[#4C4C4C] pl-4 leading-normal">
+                              {record.behavior.join(", ")}
+                            </div>
                           </div>
                         )}
-                        {symptoms.appearance.length > 0 && (
-                          <div className="flex items-center gap-1 text-gray-600">
-                            <img
-                              src={appearanceIcon}
-                              alt="외형이상"
-                              className="w-4 h-4"
-                            />
-                            {symptoms.appearance.join(", ")}
+
+                        {/* 3. 외형이상 */}
+                        {record.appearance && record.appearance.length > 0 && (
+                          <div className="flex flex-col gap-1">
+                            <div className="flex items-center gap-1.5">
+                              <div
+                                className="w-2 h-2 rounded-full"
+                                style={{ backgroundColor: pet.colorHex }}
+                              />
+                              <span className="text-xs font-medium text-gray-500">
+                                외형이상
+                              </span>
+                            </div>
+                            <div className="text-[15px] text-[#4C4C4C] pl-4 leading-normal">
+                              {record.appearance.join(", ")}
+                            </div>
                           </div>
                         )}
-                        {symptoms.reaction.length > 0 && (
-                          <div className="flex items-center gap-1 text-gray-600">
-                            <img
-                              src={periodIcon}
-                              alt="생리반응"
-                              className="w-4 h-4"
-                            />
-                            {symptoms.reaction.join(", ")}
+
+                        {/* 4. 생리반응 */}
+                        {record.reaction && record.reaction.length > 0 && (
+                          <div className="flex flex-col gap-1">
+                            <div className="flex items-center gap-1.5">
+                              <div
+                                className="w-2 h-2 rounded-full"
+                                style={{ backgroundColor: pet.colorHex }}
+                              />
+                              <span className="text-xs font-medium text-gray-500">
+                                생리반응
+                              </span>
+                            </div>
+                            <div className="text-[15px] text-[#4C4C4C] pl-4 leading-normal">
+                              {record.reaction.join(", ")}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* 기록이 아예 없는 경우 안내 문구 (선택사항) */}
+                        {!hasRecord && (
+                          <div className="text-xs text-gray-300 py-2">
+                            기록된 내용이 없습니다.
                           </div>
                         )}
                       </div>
+                    ) : (
+                      // record 객체 자체가 없을 때
+                      <div className="text-xs text-gray-300 pl-4 py-2">
+                        기록된 내용이 없습니다.
+                      </div>
                     )}
                   </div>
-
-                  <button
-                    onClick={() => {
-                      const dateKey =
-                        selectedDateState.toLocaleDateString("en-CA");
-                      setSelectedPetId(pet.petId);
-                      setSelectedDate(dateKey);
-                      setSelectedPet(pet);
-                      setShowRecordPicker(true);
-                    }}
-                    className="text-gray-500 hover:text-black"
-                  >
-                    <img src={pencil} alt="기록 버튼" />
-                  </button>
                 </div>
               );
             })}
           </div>
         </div>
       )}
+
       {showRecordPicker && (
         <div className="fixed inset-0 bg-black/30 flex items-end justify-center z-50">
           <div className="w-full max-w-[480px] mx-auto bg-white pb-6 px-[10px] rounded-t-2xl shadow-lg">
-            <div className="text-left text-lg font-semibold mb-4 pl-4 mt-4">
+            <div className="text-center text-lg font-[PretendardVariable] font-medium mb-4 mt-4">
               {selectedPet?.name} 기록하기
             </div>
 
@@ -464,12 +512,64 @@ export default function CalendarPage() {
                 const weightValue =
                   Number(pickerValue.kg) + Number(pickerValue.decimal) / 100;
 
+                const dateKey = selectedDateState.toLocaleDateString("en-CA");
+
                 try {
                   await updatePetRecord(selectedPet.petId, {
                     date: selectedDateState.toLocaleDateString("en-CA"),
                     weight: weightValue,
                   });
                   alert("체중이 기록되었습니다!");
+
+                  setDailyRecords((prev) => {
+                    const currentDayRecords = prev[dateKey] || {};
+                    const currentPetRecord = currentDayRecords[
+                      selectedPet.petId
+                    ] || {
+                      weight: null,
+                      behavior: [],
+                      appearance: [],
+                      reaction: [],
+                    };
+
+                    return {
+                      ...prev,
+                      [dateKey]: {
+                        ...currentDayRecords,
+                        [selectedPet.petId]: {
+                          ...currentPetRecord,
+                          weight: weightValue,
+                        },
+                      },
+                    };
+                  });
+
+                  setMonthlyEvents((prev) => {
+                    const currentEvents = prev[dateKey] || [];
+
+                    // 이미 해당 펫의 점이 찍혀있는지 확인 (중복 방지)
+                    // (fetchMonthlyData에서 uniqueId를 petName으로 썼으므로 동일하게 petName 사용)
+                    const hasDot = currentEvents.some(
+                      (e) => e.id === selectedPet.name
+                    );
+
+                    if (hasDot) return prev; // 이미 점이 있으면 변경 없음
+
+                    // 점이 없다면 추가
+                    return {
+                      ...prev,
+                      [dateKey]: [
+                        ...currentEvents,
+                        {
+                          id: selectedPet.name,
+                          color: selectedPet.colorHex,
+                          type: "pet",
+                          data: { petId: selectedPet.petId }, // 필요한 최소 데이터
+                        },
+                      ],
+                    };
+                  });
+
                   setShowWeightPicker(false);
                 } catch (err) {
                   console.error("체중 기록 실패", err);
